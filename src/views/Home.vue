@@ -7,14 +7,14 @@
                     <div class="classdrown">
                         <el-dropdown trigger="click">
                         <span class="el-dropdown-link">
-                            六年级1班<i class="el-icon-arrow-down el-icon--right"></i>
+                            {{thisclass}}<i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>六年级1班</el-dropdown-item>
-                            <el-dropdown-item>三年级2班</el-dropdown-item>
-                            <el-dropdown-item>四年级3班</el-dropdown-item>
+                        <el-dropdown-menu slot="dropdown" style="width: 150px;">
+                            <el-dropdown-item v-for="(aclass,index) in classmsg" :key="index" @click.native="changeclass(aclass)">{{aclass}}</el-dropdown-item>
+                            <!-- <el-dropdown-item>三年级2班</el-dropdown-item>
+                            <el-dropdown-item>四年级3班</el-dropdown-item> -->
                             <el-divider></el-divider>
-                            <div>创建班级</div>
+                            <div class="creatbtn">创建班级</div>
                         </el-dropdown-menu>
                         </el-dropdown>
                     </div>
@@ -22,31 +22,31 @@
                         <i class="fa fa-user-plus iconout"></i>
                         <span>添加成员</span>
                     </div>
-                    <div class="outbtn">
+                    <div class="outbtn" @click="openSet">
                         <i class="el-icon-s-tools iconout"></i>
                         <span>班级设置</span>
                     </div>
                 </appheader>
-                <appmain style="padding: 0;">
+                <!-- 第1部分 -->
+                <appmain style="padding: 0;" v-if="defpages==1" class="animated bounceInLeft">
                     <!-- 导航栏 -->
                     <el-menu
-                    default-active="2"
+                    default-active="/home/courseplan"
                     class="el-menu-vertical-demo"
-                    @open="handleOpen"
-                    @close="handleClose">
-                        <el-menu-item index="1">
+                    router>
+                        <el-menu-item index="/home/courseplan">
                             <template slot="title">
-                                <i class="el-icon-location"></i>
+                                <i class="el-icon-date"></i>
                                 <span>授课计划</span>
                             </template>
                         </el-menu-item>
-                        <el-menu-item index="2">
+                        <el-menu-item index="/home/homework">
                             <template slot="title">
                                 <i class="el-icon-menu"></i>
                                 <span slot="title">作业管理</span>
                             </template>
                         </el-menu-item>
-                        <el-menu-item index="3">
+                        <el-menu-item index="/home/paper">
                             <template slot="title">
                                 <i class="el-icon-document"></i>
                                 <span slot="title">作业批改</span>
@@ -54,15 +54,36 @@
                         </el-menu-item>
                     </el-menu>
                 </appmain>
+                <!-- 第2部分 -->
+                <appmain style="padding: 0;" v-else class="animated bounceInRight">
+                    <!-- 导航栏 -->
+                    <el-menu
+                    default-active="/home/worksch"
+                    class="el-menu-vertical-demo"
+                    router>
+                        <el-menu-item index="/home/worksch">
+                            <template slot="title">
+                                <i class="el-icon-s-cooperation"></i>
+                                <span>课程安排</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item index="/home/commun">
+                            <template slot="title">
+                                <i class="el-icon-edit-outline"></i>
+                                <span slot="title">答疑交流</span>
+                            </template>
+                        </el-menu-item>
+                    </el-menu>
+                </appmain>
                 <appfooter class="footbox">
                     <div class="footerbtn">
-                        <div class="innerbtn"><i class="el-icon-s-flag iconbtn"></i>计划管理</div>
+                        <div :class="{innerbtn: true, innerbtnhov: defpages!=1, innerbtnact:defpages==1}" @click="changepages(1)"><i class="el-icon-s-management iconbtn"></i>班级管理</div>
                         <div style="font-size: 28px; color: #909399;">|</div>
-                        <div class="innerbtn"><i class="el-icon-s-management iconbtn"></i>班级管理</div>
+                        <div :class="{innerbtn: true, innerbtnhov: defpages!=2, innerbtnact:defpages==2}" @click="changepages(2)"><i class="el-icon-s-flag iconbtn"></i>计划管理</div>
                     </div>                    
                 </appfooter>
             </appcontainer>
-           
+
         </el-aside>
         <el-main class="cons">
             <router-view/>
@@ -72,7 +93,28 @@
 
 <script>
 export default {
-
+    data() {
+        return {
+            classmsg: [
+                '六年级1班',
+                '三年级2班',
+                '四年级3班'
+            ],
+            thisclass: '六年级1班',
+            defpages: 1 
+        }
+    },
+    methods: {
+        changeclass(aclass) {
+            this.thisclass = aclass
+        },
+        changepages(data) {
+            this.defpages = data
+        },
+        openSet() {
+            this.$router.push('/classsetting');
+        }
+    }
 }
 </script>
 
@@ -89,7 +131,7 @@ export default {
 .boxinner {
     height: 100%;
     display: grid;
-    grid-template-rows: 25% 60% 15%;
+    grid-template-rows: 27% 58% 15%;
     /* align-content: space-around;     */
 }
 .footbox {
@@ -107,6 +149,14 @@ export default {
 .innerbtn {
     padding: 10px;
     border-radius: 10px;
+    /* background: rgba(78, 167, 255, 0.267); */
+    border: solid 1px rgba(78, 167, 255, 0.267);
+    cursor: pointer;
+}
+.innerbtnhov:hover {
+    background-color: rgba(185, 218, 252, 0.322);
+}
+.innerbtnact {
     background: rgba(78, 167, 255, 0.267);
 }
 .iconbtn {
@@ -135,5 +185,11 @@ export default {
 .outbtn {
     margin: 25px;
     cursor: pointer;
+}
+.creatbtn {
+    color: #409EFF;
+    text-align: center;
+    cursor: pointer;
+    padding: 10px;
 }
 </style>
