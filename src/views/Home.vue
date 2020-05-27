@@ -2,8 +2,8 @@
     <el-container class="home_con">
         <!-- 侧边部分 -->
         <el-aside width="25%" style="background: #fff; box-shadow: 2px 0px 8px #C0C4CC;">
-            <appcontainer class="boxinner" >
-                <appheader class="headerbox">
+            <div class="boxinner" >
+                <div class="headerbox">
                     <div class="classdrown">
                         <el-dropdown trigger="click">
                         <span class="el-dropdown-link">
@@ -18,7 +18,7 @@
                         </el-dropdown-menu>
                         </el-dropdown>
                     </div>
-                    <div class="outbtn">
+                    <div class="outbtn"  @click="dialogTableVisible = true">
                         <i class="fa fa-user-plus iconout"></i>
                         <span>添加成员</span>
                     </div>
@@ -26,9 +26,15 @@
                         <i class="el-icon-s-tools iconout"></i>
                         <span>班级设置</span>
                     </div>
-                </appheader>
+                    <el-dialog :visible.sync="dialogTableVisible" center :close-on-click-modal="false" :destroy-on-close="true">
+                        <template slot="title">
+                            <div class="titlebox">添加成员</div>
+                        </template>
+                        <AddNew/>
+                    </el-dialog>
+                </div>
                 <!-- 第1部分 -->
-                <appmain style="padding: 0;" v-if="defpages==1" class="animated bounceInLeft">
+                <div style="padding: 0;" v-if="defpages==1" class="animated bounceInLeft">
                     <!-- 导航栏 -->
                     <el-menu
                     default-active="/home/courseplan"
@@ -53,9 +59,9 @@
                             </template>
                         </el-menu-item>
                     </el-menu>
-                </appmain>
+                </div>
                 <!-- 第2部分 -->
-                <appmain style="padding: 0;" v-else class="animated bounceInRight">
+                <div style="padding: 0;" v-else class="animated bounceInRight">
                     <!-- 导航栏 -->
                     <el-menu
                     default-active="/home/worksch"
@@ -74,25 +80,37 @@
                             </template>
                         </el-menu-item>
                     </el-menu>
-                </appmain>
-                <appfooter class="footbox">
+                </div>
+                <div class="footbox">
                     <div class="footerbtn">
                         <div :class="{innerbtn: true, innerbtnhov: defpages!=1, innerbtnact:defpages==1}" @click="changepages(1)"><i class="el-icon-s-management iconbtn"></i>班级管理</div>
                         <div style="font-size: 28px; color: #909399;">|</div>
                         <div :class="{innerbtn: true, innerbtnhov: defpages!=2, innerbtnact:defpages==2}" @click="changepages(2)"><i class="el-icon-s-flag iconbtn"></i>计划管理</div>
                     </div>                    
-                </appfooter>
-            </appcontainer>
-
+                </div>
+            </div>
         </el-aside>
         <el-main class="cons">
-            <router-view/>
+            <el-container>
+                <el-header style="background: #E4E7ED; height:80px;">
+                    <Headers/>
+                </el-header>
+                <el-main>
+                    <router-view/>
+                </el-main>
+            </el-container>
         </el-main>
     </el-container>
 </template>
 
 <script>
+import AddNew from '../components/teacherView/AddNew'
+import Headers from '../components/Headers'
 export default {
+    components: {
+        AddNew,
+        Headers
+    },
     data() {
         return {
             classmsg: [
@@ -101,7 +119,8 @@ export default {
                 '四年级3班'
             ],
             thisclass: '六年级1班',
-            defpages: 1 
+            defpages: 1,
+            dialogTableVisible: false
         }
     },
     methods: {
@@ -191,5 +210,8 @@ export default {
     text-align: center;
     cursor: pointer;
     padding: 10px;
+}
+.titlebox {
+    font-size: 1.5em;
 }
 </style>

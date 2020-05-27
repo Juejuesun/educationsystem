@@ -8,9 +8,16 @@
             <div class="classname">六年1班</div>
         </el-header>
         <el-main class="mainbox">
-            <div class="plusbtn">
+            <div class="plusbtn"  @click="dialogTableVisible = true">
                 <i class="fa fa-user-plus iconclass"></i>
             </div>
+            <!-- 模态框 -->
+            <el-dialog :visible.sync="dialogTableVisible" center :close-on-click-modal="false" :destroy-on-close="true">
+                <template slot="title">
+                    <div class="titlebox">添加成员</div>
+                </template>
+                <AddNew/>
+            </el-dialog>
             <h3>
                 班级成员
             </h3>
@@ -20,7 +27,17 @@
 </template>
 
 <script>
+import AddNew from './AddNew'
+
 export default {
+    components: {
+        AddNew
+    },
+    data () {
+        return {
+            dialogTableVisible: false
+        }
+    },
     methods: {
         leftback() {
             this.$router.go(-1)
