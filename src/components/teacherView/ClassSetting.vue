@@ -8,8 +8,8 @@
             <div class="classname">六年1班</div>
         </el-header>
         <el-main class="mainbox">
-            <div class="plusbtn"  @click="dialogTableVisible = true">
-                <i class="fa fa-user-plus iconclass"></i>
+            <div class="plusbtn">
+                <i class="fa fa-user-plus iconclass"  @click="dialogTableVisible = true"></i>
             </div>
             <!-- 模态框 -->
             <el-dialog :visible.sync="dialogTableVisible" center :close-on-click-modal="false" :destroy-on-close="true">
@@ -18,10 +18,28 @@
                 </template>
                 <AddNew/>
             </el-dialog>
-            <h3>
-                班级成员
-            </h3>
+            <div class="overline">
+                <h3>
+                    班级成员
+                </h3>
+                <el-input placeholder="请输入内容" v-model="search" clearable style="width: 200px; margin-right: 80px;"></el-input>
+            </div>
             <el-divider></el-divider>
+            <div style="margin-left: 50px;">
+                <el-table
+                ref="multipleTable"
+                :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase())|| data.stuNum.toLowerCase().includes(search.toLowerCase()))"
+                tooltip-effect="dark"
+                style="width: 100%"
+                @selection-change="handleSelectionChange">
+                    <el-table-column type="selection" width="55"></el-table-column>
+                    <el-table-column label="姓名" width="120">
+                        <template slot-scope="scope">{{ scope.row.name }}</template>
+                    </el-table-column>
+                    <el-table-column prop="stuNum" label="学号"  show-overflow-tooltip> </el-table-column>
+                    <!-- <el-table-column prop="address" label="地址" show-overflow-tooltip> </el-table-column> -->
+                </el-table>
+            </div>
         </el-main>
     </el-container>
 </template>
@@ -35,12 +53,43 @@ export default {
     },
     data () {
         return {
-            dialogTableVisible: false
+            dialogTableVisible: false,
+            tableData: [
+                {
+                    name: '王小虎',
+                    stuNum: '031802222'
+                },
+                {
+                    name: '张伟',
+                    stuNum: '031802222'
+                },
+                {
+                    name: '王小虎',
+                    stuNum: '031802222'
+                },
+                {
+                    name: '马大哈',
+                    stuNum: '031802222'
+                },
+                {
+                    name: '王小虎',
+                    stuNum: '031802222'
+                },
+                {
+                    name: '王小虎',
+                    stuNum: '031802222'
+                },
+            ],
+            multipleSelection: [],
+            search: ''
         }
     },
     methods: {
         leftback() {
             this.$router.go(-1)
+        },
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
         }
     }
 }
@@ -70,7 +119,7 @@ export default {
     margin: 10px;
     font-size: 1.5em;
     color: #fff;
-    cursor: pointer;
+    
 }
 .iconclass {
     width: 30px;
@@ -78,5 +127,11 @@ export default {
     padding: 8px;
     background-color: #409EFF;
     border-radius: 50%;
+    cursor: pointer;
+}
+.overline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 </style>

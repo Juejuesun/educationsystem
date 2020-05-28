@@ -1,0 +1,198 @@
+<template>
+    <el-container class="home_con">
+        <!-- 侧边部分 -->
+        <el-aside width="25%" style="background: #fff; box-shadow: 2px 0px 8px #C0C4CC;">
+            <div class="boxinner" >
+                <div class="headerbox">
+                    <div class="classdrown">
+                        <el-dropdown trigger="click">
+                        <span class="el-dropdown-link">
+                            {{thisclass}}<i class="el-icon-arrow-down el-icon--right"></i>
+                        </span>
+                        <el-dropdown-menu slot="dropdown" style="width: 150px;">
+                            <el-dropdown-item v-for="(aclass,index) in classmsg" :key="index" @click.native="changeclass(aclass)">{{aclass}}</el-dropdown-item>
+                            <!-- <el-dropdown-item>三年级2班</el-dropdown-item>
+                            <el-dropdown-item>四年级3班</el-dropdown-item> -->
+                        </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                    <div class="outbtn" @click="openSet">
+                        <i class="el-icon-user-solid iconout"></i>
+                        <span>班级成员</span>
+                    </div>
+                </div>
+                <!-- 第1部分 -->
+                <div style="padding: 0;" v-if="defpages==1" class="animated bounceInLeft">
+                    <!-- 导航栏 -->
+                    <el-menu
+                    default-active="/stuhome/msgdetil"
+                    class="el-menu-vertical-demo"
+                    router>
+                        <el-menu-item index="/stuhome/msgdetil">
+                            <template slot="title">
+                                <i class="el-icon-news"></i>
+                                <span>任务通知</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item index="/stuhome/subwork">
+                            <template slot="title">
+                                <i class="el-icon-document"></i>
+                                <span slot="title">作业提交</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item index="/stuhome/chatti">
+                            <template slot="title">
+                                <i class="el-icon-chat-line-round"></i>
+                                <span slot="title">在线交流</span>
+                            </template>
+                        </el-menu-item>
+                    </el-menu>
+                </div>
+                <!-- 第2部分 -->
+                <div style="padding: 0; padding-left: 25px;" v-else class="animated bounceInRight">
+                    <h2>信息</h2>
+                    <div class="tecInfoBox">老师: {{teacherName}}</div>
+                    <div class="taskNumBox">需提交的作业数: {{taskNum}}</div>
+                    
+                </div>
+                <div class="footbox">
+                    <div class="footerbtn">
+                        <div :class="{innerbtn: true, innerbtnhov: defpages!=1, innerbtnact:defpages==1}" @click="changepages(1)"><i class="el-icon-s-management iconbtn"></i>学科交流</div>
+                        <div style="font-size: 28px; color: #909399;">|</div>
+                        <div :class="{innerbtn: true, innerbtnhov: defpages!=2, innerbtnact:defpages==2}" @click="changepages(2)"><i class="el-icon-s-flag iconbtn"></i>信息提示</div>
+                    </div>                    
+                </div>
+            </div>
+        </el-aside>
+        <el-main class="cons">
+            <el-container>
+                <el-header style="background: #E4E7ED; height:80px;">
+                    <Headers/>
+                </el-header>
+                <el-main>
+                    <router-view/>
+                </el-main>
+            </el-container>
+        </el-main>
+    </el-container>
+</template>
+
+<script>
+import Headers from '../components/Headers'
+export default {
+    components: {
+        Headers
+    },
+    data() {
+        return {
+            classmsg: [
+                '语文',
+                '数学',
+                '英语'
+            ],
+            thisclass: '语文',
+            defpages: 1,
+            teacherName: '张伟',
+            taskNum: 4
+        }
+    },
+    methods: {
+        changeclass(aclass) {
+            this.thisclass = aclass
+        },
+        changepages(data) {
+            this.defpages = data
+        },
+        openSet() {
+            this.$router.push('/classsetting');
+        }
+    }
+}
+</script>
+
+<style scoped>
+.home_con {
+    /* background: rgba(94,165,155, 1); */
+    height: 100%;
+}
+.cons {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+.boxinner {
+    height: 100%;
+    display: grid;
+    grid-template-rows: 20% 65% 15%;
+    /* align-content: space-around;     */
+}
+.footbox {
+    height: 100%;
+    box-shadow:0px -1px 2px #606266;
+    margin-top: 10px;
+    align-self: end;
+}
+.footerbtn {
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    padding: 20px;
+}
+.innerbtn {
+    padding: 10px;
+    border-radius: 10px;
+    /* background: rgba(78, 167, 255, 0.267); */
+    border: solid 1px rgba(78, 167, 255, 0.267);
+    cursor: pointer;
+}
+.innerbtnhov:hover {
+    background-color: rgba(185, 218, 252, 0.322);
+}
+.innerbtnact {
+    background: rgba(78, 167, 255, 0.267);
+}
+.iconbtn {
+    color: #409EFF;
+    margin-right: 5px;
+    font-size: 1.2em;
+}
+
+.headerbox {
+    height: 100%;
+}
+.el-dropdown-link {
+    font-size: 1.5em;
+    color: black;
+    cursor: pointer;
+   
+}
+.classdrown {
+    text-align: center;
+    margin: 20px;
+}
+.iconout {
+    margin-right: 5px;
+    color: #F5AB3C;
+}
+.outbtn {
+    margin: 25px;
+    cursor: pointer;
+}
+.creatbtn {
+    color: #409EFF;
+    text-align: center;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.tecInfoBox {
+    font-size: 20px;
+    color: #409EFF;
+    margin: 10px 0 10px 0;
+}
+.taskNumBox {
+    font-size: 15px;
+    color: #F56C6C;
+    margin: 10px 0 10px 0;
+}
+</style>

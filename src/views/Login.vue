@@ -67,24 +67,12 @@ export default {
         // let that = this
         this.$refs.ruleForm.validate((valid) => {
             if (valid) {
-            console.log(this.ruleForm)
-            // 登陆方法
-            // await this.$store.dispatch('logIn', this.ruleForm)
-            // this.$router.push("/home")
-            // let stated = this.getstate()
-            // if(stated) {
-            //      this.$message({
-            //       message:"登陆成功",
-            //       type:'success'
-            //     })
-            //     this.$router.push("/home")
-            // } else {
-            //     this.$message({
-            //       message:"登陆失败",
-            //       type:'error'
-            //     })
-            //     return false;
-            // }
+                console.log(this.ruleForm)
+                if(this.activeName==1) {
+                    this.$router.push("/stuhome")
+                }else {
+                    this.$router.push("/home")
+                }
             } else {
             this.$message({
                 message: '请输入账号密码',
