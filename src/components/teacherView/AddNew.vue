@@ -27,19 +27,20 @@
         <div class="hahas">
           <div style="align-self: center;">
             <el-upload
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
-            multiple
-            :limit="3"
-            :on-exceed="handleExceed">
+            :disabled="disabled"
+            action="customize"
+            name="openFile"
+            :http-request="uploadFile"
+            :file-list="file"
+            :limit="1">
               <el-button size="small" type="primary">点击上传</el-button>
               <div slot="tip" class="el-upload__tip">只能上传excel文件</div>
             </el-upload>
           </div>
-          <div class="subbtn">
+          <div class="subsbth">
+              <el-button type="info" @click="dialogTableVisible = true" size="mini">查看</el-button>
+          </div>
+          <div class="subsbth">
               <el-button type="primary" round>批量导入</el-button>
           </div>
         </div>
@@ -52,30 +53,79 @@
           </div>
         </div>
       </div>
+      <el-dialog title="表格内容" center :visible.sync="dialogTableVisible" :modal="false" :fullscreen="isfull">
+        <!-- <el-container> -->
+          <!-- <el-main> -->
+          <el-table :data="stuList" style="width: 100%" :height="tableHeight">
+            <el-table-column property="name" label="姓 名" width="150"></el-table-column>
+            <el-table-column property="stuNum" label="学 号" show-overflow-tooltip></el-table-column>
+          </el-table>
+         <span slot="footer" class="dialog-footer">
+          <el-button @click="fullscreenAct">{{btnmsg}}</el-button>
+          <el-button type="primary" @click="dialogTableVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
     </el-card>
 </template>
 
 <script>
+import XLSX from 'xlsx'
+
 export default {
     data() {
         return {
             name: '',
             num: '',
-            isShow: true
+            isShow: true,
+            file: [],
+            disabled: false,
+            stuList: [],
+            dialogTableVisible: false,
+            tableHeight: '250px',
+            btnmsg: '全 屏',
+            isfull: false
         }
     },
     methods: {
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
+      async uploadFile(params) { 
+        const _file = params.file;
+        const fileReader = new FileReader();
+        fileReader.onload = (ev) => {
+          try {
+            const data = ev.target.result;
+            const workbook = XLSX.read(data, {
+              type: 'binary'
+            });
+            for (let sheet in workbook.Sheets) {
+            //循环读取每个文件
+              const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+              console.log("读取文件");
+              console.log(sheetArray)
+              // 封装
+              sheetArray.map(v => {
+                let obj = {}     
+                obj.name = v.姓名
+                obj.stuNum = v.学号
+                this.stuList.push(obj)
+              })
+              console.log('stulist',this.stuList)
+              this.dialogTableVisible = true
+            }
+          } catch (e) {
+              this.$message.warning('文件类型不正确！');
+            }
+        };
+        fileReader.readAsBinaryString(_file);
       },
-      handlePreview(file) {
-        console.log(file);
-      },
-      handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-      },
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${ file.name }？`);
+      fullscreenAct() {
+        this.isfull = !this.isfull
+        if(this.isfull) {
+          this.tableHeight = 'null'
+          this.btnmsg = '缩 小'
+        }else {
+          this.tableHeight = '250px'
+          this.btnmsg = '全 屏'
+        }
       }
     }
 }
@@ -98,6 +148,9 @@ export default {
 .subbtn {
     text-align: center;
     margin-top: 20px
+}
+.subsbth {
+  text-align: center;
 }
 .backbtn {
   font-size: 2.2em;
@@ -125,7 +178,7 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 /* 输入框 */
 @import url("https://fonts.googleapis.com/css?family=Dosis");
