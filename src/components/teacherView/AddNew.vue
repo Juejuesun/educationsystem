@@ -31,6 +31,7 @@
             action="customize"
             name="openFile"
             :http-request="uploadFile"
+            :before-upload="beforeAvatarUpload"
             :file-list="file"
             :limit="1">
               <el-button size="small" type="primary">点击上传</el-button>
@@ -87,6 +88,17 @@ export default {
         }
     },
     methods: {
+      beforeAvatarUpload(file) {
+        var testmsg=file.name.substring(file.name.lastIndexOf('.')+1)
+        const extension = testmsg === 'xls'
+        const extension2 = testmsg === 'xlsx'
+        if (!extension && !extension2) {
+          // console.log(testmsg)
+          this.$message.error('上传Excel文件只能是 xls 或 xlsx 格式!');
+          return false;
+        }
+        return (extension || extension2)
+      },
       async uploadFile(params) { 
         const _file = params.file;
         const fileReader = new FileReader();

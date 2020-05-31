@@ -1,6 +1,7 @@
 <template>
     <div>
-        作业批改
+        <h2>作业批改</h2>
+        <router-view/>
     </div>
 </template>
 

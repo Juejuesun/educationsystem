@@ -52,7 +52,7 @@
                                 <span slot="title">作业管理</span>
                             </template>
                         </el-menu-item>
-                        <el-menu-item index="/home/paper">
+                        <el-menu-item index="/home/paper/list">
                             <template slot="title">
                                 <i class="el-icon-document"></i>
                                 <span slot="title">作业批改</span>

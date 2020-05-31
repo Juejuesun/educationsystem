@@ -6,12 +6,17 @@ import StuHome from '../views/StuHome'
 import ClassSetting from '../components/teacherView/ClassSetting'
 import CoursePlan from '../components/teacherView/CoursePlan'
 import Homework from '../components/teacherView/Homework'
-import Paper from '../components/teacherView/Paper'
+import Paper from '../components/teacherView/paper/Paper'
 import WorkSch from '../components/teacherView/WorkSch'
 import Commun from '../components/teacherView/Commun'
 import MsgDetil from '../components/studentView/MsgDetil'
 import SubWork from '../components/studentView/SubWork'
 import Chatti from '../components/Chatti'
+import PerCenter from '../components/PerCenter'
+import DetailPage from '../components/teacherView/DetailPage'
+import PaperList from '../components/teacherView/paper/PaperList'
+import PaperCheck from '../components/teacherView/paper/PaperCheck'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -41,12 +46,29 @@ const routes = [
       {
         path: '/home/homework',
         name: 'Homework',
-        component: Homework,
+        component: Homework
+      },
+      {
+        path: '/home/homework/detail',
+        name: 'DetailPage',
+        component: DetailPage,
       },
       {
         path: '/home/paper',
         name: 'Paper',
         component: Paper,
+        children: [
+          {
+            path: '/home/paper/list',
+            name: 'PaperList',
+            component: PaperList,
+          },
+          {
+            path: '/home/paper/check',
+            name: 'PaperCheck',
+            component: PaperCheck,
+          }
+        ]
       },
       {
         path: '/home/worksch',
@@ -90,6 +112,11 @@ const routes = [
     path: '/classsetting',
     name: 'ClassSetting',
     component: ClassSetting
+  },
+  {
+    path: '/percenter',
+    name: 'PerCenter',
+    component: PerCenter
   }
 ]
 

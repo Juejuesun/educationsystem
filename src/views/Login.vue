@@ -45,8 +45,8 @@ export default {
         return {
             activeName: 1,
             ruleForm: {
-                id: '',
-                password: ''
+                id: '123',
+                password: '12345678'
             },
             rules: {
                 id: [
