@@ -42,7 +42,11 @@ import {
   DropdownItem,
   DropdownMenu,
   Divider,
-  Calendar
+  Calendar,
+  Option,
+  Select,
+  Radio,
+  RadioGroup
 } from 'element-ui'
 
 Vue.use(Button)
@@ -83,6 +87,10 @@ Vue.use(DropdownItem)
 Vue.use(DropdownMenu)
 Vue.use(Divider)
 Vue.use(Calendar)
+Vue.use(Option)
+Vue.use(Select)
+Vue.use(Radio)
+Vue.use(RadioGroup)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox
