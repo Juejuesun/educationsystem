@@ -1,6 +1,7 @@
 <template>
     <div>
         <p>作业列表</p>
+        <el-divider></el-divider>
         <el-table
             :data="tableData"
             stripe

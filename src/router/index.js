@@ -16,6 +16,7 @@ import PerCenter from '../components/PerCenter'
 import DetailPage from '../components/teacherView/DetailPage'
 import PaperList from '../components/teacherView/paper/PaperList'
 import PaperCheck from '../components/teacherView/paper/PaperCheck'
+import CheckView from '../components/teacherView/paper/CheckView'
 
 Vue.use(VueRouter)
 
@@ -67,6 +68,11 @@ const routes = [
             path: '/home/paper/check',
             name: 'PaperCheck',
             component: PaperCheck,
+          },
+          {
+            path: '/home/paper/view',
+            name: 'CheckView',
+            component: CheckView,
           }
         ]
       },

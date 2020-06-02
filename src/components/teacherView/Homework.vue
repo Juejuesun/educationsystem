@@ -81,7 +81,7 @@
                             <el-input v-model="form.id"></el-input>
                         </el-form-item>
                         <el-form-item label="截止时间">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="form.ddl" style="width: 50%;"></el-date-picker>
+                            <el-date-picker type="date" placeholder="选择日期" v-model="form.ddl" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="onSubmit">立即创建</el-button>

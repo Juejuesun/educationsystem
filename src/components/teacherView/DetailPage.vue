@@ -44,11 +44,12 @@
         <span class="backbtn" @click="$router.back()"><i class="fa fa-long-arrow-left"></i></span>
         <span>作业号：{{$route.query.row.id}}</span>
       </div>
-      <el-button type="primary"  @click="isShow = true">
+      <el-button type="primary" size="medium"  @click="isShow = true">
         导出数据
       </el-button>
     </div>
-
+    <el-divider></el-divider>
+    <!-- 表格数据 -->
     <el-table :data="list">
       <el-table-column label="序号" width="55">
         <template slot-scope="scope">
