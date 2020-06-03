@@ -1,6 +1,7 @@
 <template>
     <div>
-        在线交流
+        <h2>提交作业</h2>
+        <router-view/>
     </div>
 </template>
 
@@ -10,6 +11,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 </style>

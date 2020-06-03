@@ -8,15 +8,16 @@ import CoursePlan from '../components/teacherView/CoursePlan'
 import Homework from '../components/teacherView/Homework'
 import Paper from '../components/teacherView/paper/Paper'
 import WorkSch from '../components/teacherView/WorkSch'
-import Commun from '../components/teacherView/Commun'
 import MsgDetil from '../components/studentView/MsgDetil'
-import SubWork from '../components/studentView/SubWork'
-import Chatti from '../components/Chatti'
+import SubWork from '../components/studentView/paper/SubWork'
+import Chatti from '../components/chatView/Chatti'
 import PerCenter from '../components/PerCenter'
 import DetailPage from '../components/teacherView/DetailPage'
 import PaperList from '../components/teacherView/paper/PaperList'
 import PaperCheck from '../components/teacherView/paper/PaperCheck'
 import CheckView from '../components/teacherView/paper/CheckView'
+import SubView from '../components/studentView/paper/SubView'
+import PushPaper from '../components/studentView/paper/PushPaper'
 
 Vue.use(VueRouter)
 
@@ -82,9 +83,9 @@ const routes = [
         component: WorkSch,
       },
       {
-        path: '/home/commun',
-        name: 'Commun',
-        component: Commun,
+        path: '/home/chatti',
+        name: 'Chatti',
+        component: Chatti,
       }
     ]
   },
@@ -103,9 +104,21 @@ const routes = [
         component: MsgDetil,
       },
       {
-        path: '/stuhome/subwork',
-        name: 'SubWork',
-        component: SubWork,
+        path: '/stuhome/subview',
+        name: 'SubView',
+        component: SubView,
+        children: [
+          {
+            path: '/stuhome/subview/work',
+            name: 'SubWork',
+            component: SubWork,
+          },
+          {
+            path: '/stuhome/subview/push',
+            name: 'PushPaper',
+            component: PushPaper,
+          }
+        ]
       },
       {
         path: '/stuhome/chatti',
@@ -127,6 +140,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+  mode: 'hash',
   routes
 })
 

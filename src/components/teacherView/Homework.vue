@@ -91,6 +91,30 @@
                 </div>
             </el-dialog>
         </div>
+        <div>
+            <el-dialog :visible.sync="EditVisible" center :close-on-click-modal="false" :destroy-on-close="true">
+                <template slot="title">
+                    <div class="titlebox">发布作业</div>
+                </template>
+                <div>
+                    <el-form ref="form" :model="form" label-width="80px">
+                        <el-form-item label="作业名称">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="作业内容">
+                            <el-input type="textarea" v-model="form.desc"></el-input>
+                        </el-form-item>
+                        <el-form-item label="截止时间">
+                            <el-date-picker type="date" placeholder="选择日期" v-model="form.ddl" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="editDone">确认修改</el-button>
+                            <el-button @click="dialogTableVisible = false">取消</el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </el-dialog>
+        </div>
     </div>
 </template>
 
@@ -104,6 +128,8 @@ export default {
             multipleSelection: [],
             toShow: false,
             dialogTableVisible: false,
+            EditVisible: false,
+            rowIndex: 0,
             form: {
                 id: '12987127',
                 name: '第九章作业',
@@ -155,6 +181,13 @@ export default {
         // },
         handleEdit(index, row) {
             console.log(index, row);
+            this.form = this.deepClone(row)
+            this.rowIndex = index
+            this.EditVisible = true
+        },
+        editDone() {
+            this.homeworkList[this.rowIndex] = this.deepClone(this.form)
+            this.EditVisible = false
         },
         handleDelete(index) {
             console.log(index);

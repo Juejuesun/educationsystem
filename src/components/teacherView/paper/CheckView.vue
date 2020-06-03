@@ -6,14 +6,21 @@
         </div>
         <el-divider></el-divider>
         <div>
-            作业内容
+            作业内容            
+        </div>
+        <div>
+            <div v-html="content"></div>
         </div>
     </div>
 </template>
 
 <script>
-export default {
+import { mapState } from 'vuex'
 
+export default {
+    computed: {
+        ...mapState(['content'])
+    }
 }
 </script>
 

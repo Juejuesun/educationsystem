@@ -40,12 +40,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
     data () {
         return {
             activeName: 1,
             ruleForm: {
-                id: '123',
+                id: '12345',
                 password: '12345678'
             },
             rules: {
@@ -59,28 +60,37 @@ export default {
             }
         }
     },
+    computed: {
+        ...mapState(['userId', 'userInfo'])
+    },
     methods: {
         handleClick(ang) {
             this.activeName = ang
         },
         submitForm () {
-        // let that = this
-        this.$refs.ruleForm.validate((valid) => {
-            if (valid) {
-                console.log(this.ruleForm)
-                if(this.activeName==1) {
-                    this.$router.push("/stuhome")
-                }else {
-                    this.$router.push("/home")
+            // let that = this
+            this.$refs.ruleForm.validate((valid) => {
+                if (valid) {
+                    console.log(this.ruleForm)
+
+                    this.$store.dispatch('pushInfo',this.ruleForm)
+                    // this.userId = this.ruleForm.id
+                    // this.userInfo.userName = this.ruleForm.id//暂时这样
+                    window.sessionStorage.setItem('FIRSTCRT', 'true')//在线交流中使用
+
+                    if(this.activeName==1) {
+                        this.$router.push("/stuhome")
+                    }else {
+                        this.$router.push("/home")
+                    }
+                } else {
+                this.$message({
+                    message: '请输入账号密码',
+                    type: 'error'
+                })
+                return false
                 }
-            } else {
-            this.$message({
-                message: '请输入账号密码',
-                type: 'error'
             })
-            return false
-            }
-        })
         }
         // async getstate() {
         //     return await window.localStorage.getItem('USERNAME')

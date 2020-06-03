@@ -1,89 +1,80 @@
 <template>
     <div>
-        <div>任务通知</div> 
+        <p>任务通知</p>
+        <el-divider></el-divider>
+        <div>
+            <el-input v-model="search" style="width: 200px; margin-right: 80px;" size="mini" placeholder="输入关键字搜索"  clearable/>
+        </div>        
         <el-table
-            :data="tableData"
-            style="width: 100%">
+        :data="homeworkList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase())|| data.desc.toLowerCase().includes(search.toLowerCase()))"
+        style="width: 100%;"
+        @cell-mouse-enter="mouseEnter"
+        @cell-mouse-leave="mouseLeave">
             <el-table-column type="expand">
             <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
-                <el-form-item label="商品名称">
+                <el-form-item label="作业名称：">
                     <span>{{ props.row.name }}</span>
                 </el-form-item>
-                <el-form-item label="所属店铺">
-                    <span>{{ props.row.shop }}</span>
-                </el-form-item>
-                <el-form-item label="商品 ID">
-                    <span>{{ props.row.id }}</span>
-                </el-form-item>
-                <el-form-item label="店铺 ID">
-                    <span>{{ props.row.shopId }}</span>
-                </el-form-item>
-                <el-form-item label="商品分类">
-                    <span>{{ props.row.category }}</span>
-                </el-form-item>
-                <el-form-item label="店铺地址">
-                    <span>{{ props.row.address }}</span>
-                </el-form-item>
-                <el-form-item label="商品描述">
+                <el-form-item label="截止日期：">
+                    <span>{{ props.row.ddl }}</span>
+                </el-form-item>             
+                <el-form-item label="作业内容：">
                     <span>{{ props.row.desc }}</span>
                 </el-form-item>
                 </el-form>
             </template>
             </el-table-column>
             <el-table-column
-            label="商品 ID"
+            label="作业号"
             prop="id">
             </el-table-column>
             <el-table-column
-            label="商品名称"
+            label="作业名称"
             prop="name">
             </el-table-column>
             <el-table-column
-            label="描述"
-            prop="desc">
+            label="截止日期"
+            prop="ddl">
+            </el-table-column>
+
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button
+                    size="mini"
+                    @click="checkWork(scope.$index, scope.row)" style="height: 20px;padding: 5px;" class="animated fadeIn">提交详情</el-button>
+                </template>
             </el-table-column>
         </el-table>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     data() {
         return {
-            tableData: [{
-          id: '12987122',
-          name: '好滋好味鸡蛋仔',
-          category: '江浙小吃、小吃零食',
-          desc: '荷兰优质淡奶，奶香浓而不腻',
-          address: '上海市普陀区真北路',
-          shop: '王小虎夫妻店',
-          shopId: '10333'
-        }, {
-          id: '12987123',
-          name: '好滋好味鸡蛋仔',
-          category: '江浙小吃、小吃零食',
-          desc: '荷兰优质淡奶，奶香浓而不腻',
-          address: '上海市普陀区真北路',
-          shop: '王小虎夫妻店',
-          shopId: '10333'
-        }, {
-          id: '12987125',
-          name: '好滋好味鸡蛋仔',
-          category: '江浙小吃、小吃零食',
-          desc: '荷兰优质淡奶，奶香浓而不腻',
-          address: '上海市普陀区真北路',
-          shop: '王小虎夫妻店',
-          shopId: '10333'
-        }, {
-          id: '12987126',
-          name: '好滋好味鸡蛋仔',
-          category: '江浙小吃、小吃零食',
-          desc: '荷兰优质淡奶，奶香浓而不腻',
-          address: '上海市普陀区真北路',
-          shop: '王小虎夫妻店',
-          shopId: '10333'
-        }]
+            search: '',
+            toShow: false,
+        }
+    },
+    computed: {
+        ...mapState([ 'homeworkList' ])
+    },
+    methods: {
+        mouseEnter(row) {
+            row.isShow = true
+        },
+        mouseLeave(row) {
+            row.isShow = false
+        },
+        checkWork(index, row) {
+            console.log(index, row)
+            // this.$router.push({
+            //     name: 'DetailPage',
+            //     query:{row: row}
+            // })
         }
     }
 }

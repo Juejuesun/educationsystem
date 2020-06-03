@@ -1,8 +1,14 @@
-import {ADD_TODO} from './mutation-types'
+import { PUSH_INFO, SHOW_SEARCH, PUSH_WORK } from './mutation-types'
 
 export default{
-    addTodo({commit}, todo) {
+    pushInfo({commit}, loginInfo) {
         //提交对mutation的请求
-        commit(ADD_TODO, {todo})
+        commit(PUSH_INFO, {loginInfo})
     },
+    showSearch({commit}, search) {
+        commit(SHOW_SEARCH, {search})
+    },
+    pushWork({commit}, cons) {
+        commit(PUSH_WORK, {cons})
+    }
 }

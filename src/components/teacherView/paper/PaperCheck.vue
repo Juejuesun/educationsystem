@@ -19,7 +19,7 @@
             label="学号"
             width="180">
             </el-table-column>
-            <el-table-column label="提交状况">
+          <el-table-column label="提交状况">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.subState">已提交</el-tag>
               <el-tag v-else type="danger">未提交</el-tag>
@@ -77,7 +77,7 @@ export default {
         this.$router.push({
                 name: 'CheckView',
                 query: {
-                  homeworkId: row.id,
+                  homeworkId: this.$route.query.homeworkId,
                   rowInfo: row
                 }
             })

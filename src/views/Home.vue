@@ -73,7 +73,7 @@
                                 <span>课程安排</span>
                             </template>
                         </el-menu-item>
-                        <el-menu-item index="/home/commun">
+                        <el-menu-item index="/home/chatti">
                             <template slot="title">
                                 <i class="el-icon-edit-outline"></i>
                                 <span slot="title">答疑交流</span>
@@ -114,11 +114,11 @@ export default {
     data() {
         return {
             classmsg: [
-                '六年级1班',
-                '三年级2班',
-                '四年级3班'
+                '六年级1班语文',
+                '三年级2班数学',
+                '四年级3班英语'
             ],
-            thisclass: '六年级1班',
+            thisclass: '六年级1班语文',
             defpages: 1,
             dialogTableVisible: false
         }
