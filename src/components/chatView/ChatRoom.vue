@@ -10,7 +10,7 @@
                         <div class="respond">{{chat.uname}}</div>
                     </div>
                     <div v-else-if="chat.msgType == 'msgres'" class="msgresMsg">
-                        <div v-if="chat.uname==userInfo.userName&&chat.cid===userId" class="self">
+                        <div v-if="chat.uname==userInfo.userName&&chat.cid===userInfo.userId" class="self">
                             <el-card class="box-card" shadow="hover" style="background-color: #409EFF; color: #FFFFFF">
                                 <div>{{chat.msg}}</div>
                                 <div class="msgdate">{{chat.date}} &nbsp;{{chat.uname}}</div>
@@ -145,7 +145,7 @@ export default {
                 msg: this.msg,
                 uname: this.userInfo.userName,
                 date: moment().format("HH:mm:ss"),
-                cid: this.userId,
+                cid: this.userInfo.userId,
                 avatar: this.userInfo.userAvatar
             }
             // console.log(transdata)
@@ -175,7 +175,7 @@ export default {
         this.openmsg()
     },
     computed: {
-        ...mapState(['chatText','userInfo','userId'])
+        ...mapState(['chatText','userInfo'])
     },
     mounted() {
         this.getImeUrl()

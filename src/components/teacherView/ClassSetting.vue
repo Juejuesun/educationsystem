@@ -9,7 +9,8 @@
         </el-header>
         <el-main class="mainbox">
             <div class="plusbtn">
-                <i class="fa fa-user-plus iconclass"  @click="dialogTableVisible = true"></i>
+                <!-- <i class="fa fa-user-plus iconclass"  @click="dialogTableVisible = true"></i> -->
+                <el-button :disabled="userInfo.userRoot===1" type="primary" icon="fa fa-user-plus" circle @click="dialogTableVisible = true"></el-button>
             </div>
             <!-- 模态框 -->
             <el-dialog :visible.sync="dialogTableVisible" center :close-on-click-modal="false" :destroy-on-close="true">
@@ -46,6 +47,7 @@
 
 <script>
 import AddNew from './AddNew'
+import { mapState} from 'vuex'
 
 export default {
     components: {
@@ -84,6 +86,9 @@ export default {
             search: ''
         }
     },
+    computed: {
+        ...mapState([ 'userInfo' ])
+    },
     methods: {
         leftback() {
             this.$router.go(-1)
@@ -117,17 +122,6 @@ export default {
 .plusbtn {
     text-align: end;
     margin: 10px;
-    font-size: 1.5em;
-    color: #fff;
-    
-}
-.iconclass {
-    width: 30px;
-    height: 30px;
-    padding: 8px;
-    background-color: #409EFF;
-    border-radius: 50%;
-    cursor: pointer;
 }
 .overline {
     display: flex;

@@ -16,13 +16,13 @@
             <el-divider></el-divider>
             <div class="infoBox">
                 <div>
-                    <el-avatar style="border: solid 1px #C0C4CC;" shape="square" :size="100" fit="fill" :src="userInfo.userAvatar"></el-avatar>
+                    <el-avatar style="border: solid 1px #C0C4CC;" shape="square" :size="100" fit="fill" :src="userInfo.userAvatar">{{userInfo.userName}}</el-avatar>
                 </div>
                 <div>
                     <h4>姓名：<span>{{userInfo.userName}}</span></h4>                    
                 </div>
                 <div>
-                    <h4>账号：<span>{{userId}}</span></h4>                    
+                    <h4>账号：<span>{{userInfo.userId}}</span></h4>                    
                 </div>
             </div>
         </el-main>
@@ -38,7 +38,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['userInfo', 'userId'])
+        ...mapState(['userInfo'])
     },
     methods: {
         leftback() {

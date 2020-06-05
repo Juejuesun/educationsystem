@@ -15,8 +15,8 @@
         </div>
         <div class="pos">
             <div class="angle">
-                <div :class="{angbox: true ,angboxact: activeName==1}" @click="handleClick(1)">学生</div>
-                <div :class="{angbox: true ,angboxact: activeName==2}" @click="handleClick(2)">教师</div>
+                <div :class="{angbox: true ,angboxact: ruleForm.identity==1}" @click="handleClick(1)">学生</div>
+                <div :class="{angbox: true ,angboxact: ruleForm.identity==2}" @click="handleClick(2)">教师</div>
             </div>
             <div class="login_box">
                 <div class="fonts">登陆</div>
@@ -44,10 +44,10 @@ import { mapState } from 'vuex'
 export default {
     data () {
         return {
-            activeName: 1,
             ruleForm: {
                 id: '12345',
-                password: '12345678'
+                password: '12345678',
+                identity: 1,
             },
             rules: {
                 id: [
@@ -61,34 +61,43 @@ export default {
         }
     },
     computed: {
-        ...mapState(['userId', 'userInfo'])
+        ...mapState(['userInfo'])
     },
     methods: {
         handleClick(ang) {
-            this.activeName = ang
+            this.ruleForm.identity = ang
         },
         submitForm () {
             // let that = this
-            this.$refs.ruleForm.validate((valid) => {
+            this.$refs.ruleForm.validate(async (valid) => {
                 if (valid) {
                     console.log(this.ruleForm)
 
-                    this.$store.dispatch('pushInfo',this.ruleForm)
-                    // this.userId = this.ruleForm.id
-                    // this.userInfo.userName = this.ruleForm.id//暂时这样
-                    window.sessionStorage.setItem('FIRSTCRT', 'true')//在线交流中使用
-
-                    if(this.activeName==1) {
-                        this.$router.push("/stuhome")
+                    const {data: res} = await this.$http.post('/login', this.ruleForm)
+                    console.log(res)
+                    if(res.status === 'success') {
+                        res.identity = this.ruleForm.identity
+                        this.$store.dispatch('pushInfo', res)
+                        window.sessionStorage.setItem('FIRSTCRT', 'true')//在线交流中使用
+                        if(this.ruleForm.identity==1) {
+                            this.$router.push("/stuhome")
+                        }else {
+                            this.$router.push("/home")
+                        }
                     }else {
-                        this.$router.push("/home")
+                        this.$refs.ruleForm.resetFields()
+                        this.$message({
+                            message: '登陆失败，请检查账号密码！',
+                            type: 'error'
+                        })
+                        return false
                     }
                 } else {
-                this.$message({
-                    message: '请输入账号密码',
-                    type: 'error'
-                })
-                return false
+                    this.$message({
+                        message: '请输入账号密码',
+                        type: 'error'
+                    })
+                    return false
                 }
             })
         }

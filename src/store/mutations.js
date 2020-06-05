@@ -3,8 +3,10 @@ const moment = require("moment")
 
 export default{
     [PUSH_INFO] (state, {loginInfo}) { //让ADD_TODO变成一个变量
-        state.userId = loginInfo.id
-        state.userInfo.userName = loginInfo.id//暂时这样
+        state.userInfo.userId = loginInfo.id
+        state.userInfo.userName = loginInfo.name//暂时这样
+        state.userInfo.userRoot = loginInfo.identity
+        state.userInfo.userAvatar = loginInfo.avatar
     },
     [SHOW_SEARCH](state,{search}){
       if(search){

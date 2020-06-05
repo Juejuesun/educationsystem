@@ -5,12 +5,16 @@ import store from './store'
 import './plugins/element.js'
 import VueSocketIo from 'vue-socket.io'
 import SocketIO from "socket.io-client"
+import axios from 'axios'
 
 // 导入全局样式
 import './assets/global.css'
 
 // Vue.config.productionTip = false
 Vue.config.productionTip = true
+
+axios.defaults.baseURL = 'http://localhost:81'//测试用
+Vue.prototype.$http = axios
 
 Vue.use(new VueSocketIo({
   debug: false,
