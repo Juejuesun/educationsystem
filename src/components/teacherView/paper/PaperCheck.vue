@@ -2,7 +2,7 @@
     <div>
         <div>
           <span class="backbtn" @click="$router.back()"><i class="fa fa-long-arrow-left"></i></span>
-          <span>作业号：{{$route.query.homeworkId}}</span>
+          <span>作业号：{{$route.query.homeworkCon.id}}</span>
         </div>
         <el-divider></el-divider>
         <el-table
@@ -77,7 +77,7 @@ export default {
         this.$router.push({
                 name: 'CheckView',
                 query: {
-                  homeworkId: this.$route.query.homeworkId,
+                  homeworkCon: this.$route.query.homeworkCon,
                   rowInfo: row
                 }
             })

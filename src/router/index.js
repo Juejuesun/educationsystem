@@ -8,7 +8,9 @@ import CoursePlan from '../components/teacherView/CoursePlan'
 import Homework from '../components/teacherView/Homework'
 import Paper from '../components/teacherView/paper/Paper'
 import WorkSch from '../components/teacherView/WorkSch'
-import MsgDetil from '../components/studentView/MsgDetil'
+import MsgDetil from '../components/studentView/msgdetail/MsgDetil'
+import MsgList from '../components/studentView/msgdetail/MsgList'
+import SubDetil from '../components/studentView/msgdetail/SubDetil'
 import SubWork from '../components/studentView/paper/SubWork'
 import Chatti from '../components/chatView/Chatti'
 import PerCenter from '../components/PerCenter'
@@ -102,6 +104,22 @@ const routes = [
         path: '/stuhome/msgdetil',
         name: 'MsgDetil',
         component: MsgDetil,
+        children: [
+          {
+            path: '/stuhome/msgdetil',
+            redirect: '/stuhome/msgdetil/list'
+          },
+          {
+            path: '/stuhome/msgdetil/list',
+            name: 'MsgList',
+            component: MsgList,
+          },
+          {
+            path: '/stuhome/msgdetil/sub',
+            name: 'SubDetil',
+            component: SubDetil,
+          }
+        ]
       },
       {
         path: '/stuhome/subview',

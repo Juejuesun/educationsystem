@@ -5,7 +5,7 @@
                 <i class="fa fa-long-arrow-left" style="margin-right: 10px;"></i>
                 <span>班级</span>
             </div>
-            <div class="classname">王小虎</div>
+            <div class="classname">{{userInfo.userName}}</div>
         </el-header>
         <el-main class="mainbox">
             <div class="overline">
@@ -14,16 +14,31 @@
                 </h3>
             </div>
             <el-divider></el-divider>
+            <div class="infoBox">
+                <div>
+                    <el-avatar style="border: solid 1px #C0C4CC;" shape="square" :size="100" fit="fill" :src="userInfo.userAvatar"></el-avatar>
+                </div>
+                <div>
+                    <h4>姓名：<span>{{userInfo.userName}}</span></h4>                    
+                </div>
+                <div>
+                    <h4>账号：<span>{{userId}}</span></h4>                    
+                </div>
+            </div>
         </el-main>
     </el-container>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
     data () {
         return {
             
         }
+    },
+    computed: {
+        ...mapState(['userInfo', 'userId'])
     },
     methods: {
         leftback() {
@@ -71,5 +86,9 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.infoBox {
+    width: 95%;
+    margin-left: 5%;
 }
 </style>

@@ -71,7 +71,7 @@ export default {
         checkWork(index, row) {
             this.$router.push({
                 name: 'PaperCheck',
-                query:{homeworkId: row.id}
+                query:{homeworkCon: row}
             })
         }
     }

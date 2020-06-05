@@ -16,15 +16,29 @@
             </el-table-column>
             <el-table-column type="expand">
             <template slot-scope="props">
-                <el-form label-position="left" inline class="demo-table-expand">
+                <el-form label-position="left" class="demo-table-expand">
                 <el-form-item label="作业名称：">
                     <span>{{ props.row.name }}</span>
                 </el-form-item>
                 <el-form-item label="截止日期：">
                     <span>{{ props.row.ddl }}</span>
-                </el-form-item>             
+                </el-form-item>
                 <el-form-item label="作业内容：">
                     <span>{{ props.row.desc }}</span>
+                </el-form-item>
+                <el-form-item label="作业图片：">
+                    <!-- <span><img v-for="(img, index) in props.row.imgs" :key="index" :src="img" /></span> -->
+                    <span>
+                        <!-- <div class="demo-image__preview"> -->
+                        <el-image
+                            v-for="(img, index) in props.row.imgs"
+                            :key="index"
+                            style="width: 100px; height: 100px; margin-right: 10px;"
+                            :src="img" 
+                            :preview-src-list="props.row.imgs">
+                        </el-image>
+                        <!-- </div> -->
+                    </span>
                 </el-form-item>
                 </el-form>
             </template>
@@ -77,6 +91,19 @@
                         <el-form-item label="作业内容">
                             <el-input type="textarea" v-model="form.desc"></el-input>
                         </el-form-item>
+                        <el-form-item label="上传图片">
+                           <el-upload
+                            action="https://jsonplaceholder.typicode.com/posts/"
+                            list-type="picture-card"
+                            :before-upload="handleBefore"
+                            :on-preview="handlePictureCardPreview"
+                            :on-remove="handleRemove">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                            <el-dialog :visible.sync="dialogVisible" :modal="false">
+                                <img width="100%" :src="dialogImageUrl" alt="">
+                            </el-dialog>
+                        </el-form-item>
                         <el-form-item label="作业号" style="width: 50%;">
                             <el-input v-model="form.id"></el-input>
                         </el-form-item>
@@ -88,6 +115,11 @@
                             <el-button @click="dialogTableVisible = false">取消</el-button>
                         </el-form-item>
                     </el-form>
+                    
+                    <!-- <div>
+                        图片
+                        <img :src="iconBase64[0]" />
+                    </div> -->
                 </div>
             </el-dialog>
         </div>
@@ -124,6 +156,9 @@ import { mapState } from 'vuex'
 export default {
     data() {
         return {
+            dialogImageUrl: '',
+            dialogVisible: false,
+            iconBase64: [],
             search: '',
             multipleSelection: [],
             toShow: false,
@@ -135,6 +170,7 @@ export default {
                 name: '第九章作业',
                 ddl: '2020-06-02',
                 desc: '哈哈哈哈哈哈哈哈哈哈',
+                imgs: [],
                 isShow: false
             },
             tableData: [
@@ -142,6 +178,7 @@ export default {
                     id: '12987122',
                     name: '第八章作业',
                     desc: '荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻',
+                    imgs: [],
                     ddl: '2020-05-31',
                     isShow: false
                 },
@@ -149,20 +186,23 @@ export default {
                     id: '12987123',
                     name: '第七章作业',
                     desc: '荷兰优质淡奶，奶香浓而不腻',
+                    imgs: [],
                     ddl: '2020-05-30',
                     isShow: false
                 },
                 {
                     id: '12987125',
                     name: '第六章作业',                    
-                    desc: '荷兰优质淡奶，奶香浓而不腻',                    
+                    desc: '荷兰优质淡奶，奶香浓而不腻',
+                    imgs: [],                 
                     ddl: '2020-05-28',
                     isShow: false
                 },
                 {
                     id: '12987126',
                     name: '第五章作业',                   
-                    desc: '荷兰优质淡奶，奶香浓而不腻',                   
+                    desc: '荷兰优质淡奶，奶香浓而不腻',
+                    imgs: [],                 
                     ddl: '2020-04-31',
                     isShow: false
                 }
@@ -179,6 +219,26 @@ export default {
         //     row.id = '哈哈'
         //     this.isShow = true
         // },
+        handleBefore(file) {
+            console.log(file)
+            let reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => {
+                console.log('file 转 base64结果：' + reader.result)
+                this.iconBase64.push( reader.result)
+                this.form.imgs.push(reader.result)
+            }
+            reader.onerror = function (error) {
+                console.log('Error: ', error)
+            }
+        },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePictureCardPreview(file) {
+            this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
+        },
         handleEdit(index, row) {
             console.log(index, row);
             this.form = this.deepClone(row)

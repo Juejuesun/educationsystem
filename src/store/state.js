@@ -6,7 +6,7 @@ export default{
     userId: '12345678',
     userRoot: 1,
     userInfo: {
-        userName: '哈啊哈',
+        userName: '王小虎',
         userAvatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
     },
     homeworkList: [
