@@ -42,7 +42,7 @@
       <!-- <div @click="isShow = true">导出数据</div> -->
       <div>
         <span class="backbtn" @click="$router.back()"><i class="fa fa-long-arrow-left"></i></span>
-        <span>作业号：{{$route.query.row.id}}</span>
+        <span>作业号：{{$route.query.row.workId}}</span>
       </div>
       <el-button type="primary" size="medium"  @click="isShow = true">
         导出数据
@@ -50,7 +50,7 @@
     </div>
     <el-divider></el-divider>
     <!-- 表格数据 -->
-    <el-table :data="list">
+    <el-table :data="teaList">
       <el-table-column label="序号" width="55">
         <template slot-scope="scope">
           {{ scope.$index + 1 }}
@@ -68,13 +68,13 @@
       </el-table-column>
       <el-table-column label="提交日期">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.subState">{{ scope.row.subDate }}</el-tag>
+          <el-tag v-if="scope.row.subState==1">{{ scope.row.subDate }}</el-tag>
           <el-tag v-else type="danger">未提交</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="作业分数">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.checkState">{{ scope.row.point }}</el-tag>
+          <el-tag v-if="scope.row.checkState==1">{{ scope.row.point }}</el-tag>
           <el-tag v-else type="warning">未批改</el-tag>
         </template>
       </el-table-column>
@@ -84,6 +84,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   // name: "ExportExcel",
   data() {
@@ -123,6 +125,9 @@ export default {
       isShow: false
     };
   },
+  computed: {
+    ...mapState(['teaList'])
+  },
   created() {
     // this.fetchData();
   },
@@ -139,7 +144,7 @@ export default {
       import("@/vendor/ExportExcel").then((excel) => {
         const tHeader = ["学号", "姓名", "提交日期", "作业分数"];
         const filterVal = ["stuNum", "name", "subDate", "point"];
-        const list = this.list;
+        const list = this.teaList;
         const data = this.formatJson(filterVal, list);
         excel.export_json_to_excel({
           header: tHeader,

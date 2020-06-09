@@ -10,13 +10,27 @@ export default{
         userName: '王小虎',
         userAvatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
     },
+    teaClassInfo: {
+        defaultName: '',
+        defaultInfo: {},
+        classList: []
+    },
+    teaList: [],//提交列表教师端
+    stuClassInfo: {
+        defaultName: '',
+        defaultInfo: {},
+        classList: []
+    },
     homeworkList: [
         {
-            id: '12987122',
-            name: '第八章作业',
-            desc: '荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻',
-            ddl: '2020-05-31',
-            isShow: false
+            workId: "31865",
+            workTitle: "装率当响开并价华现和受日。",
+            workContext: "议至通儿大质通酸条什发铁国要知类改先。规收事铁造酸动率建具验段报。中反与管下大信已干相却较了节家。",
+            shouldSubmit: 52,
+            alreadySubmitted: 30,
+            date: "2003-07-14",
+            isShow: false,
+            imgs: []
         },
         {
             id: '12987123',

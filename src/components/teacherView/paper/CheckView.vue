@@ -6,10 +6,10 @@
         </div>
         <el-divider></el-divider>
         <p>
-            标题：<span>{{$route.query.homeworkCon.name}}</span>     
+            标题：<span>{{homeworkCon.workTitle}}</span>     
         </p>
         <p>
-            内容：<span>{{$route.query.homeworkCon.desc}}</span>
+            内容：<span>{{homeworkCon.workContext}}</span>
         </p>
         <el-divider></el-divider>
         <p>
@@ -19,7 +19,8 @@
         <div class="qlbox">
             <!-- <div v-html="content"></div> -->
             <div class="ql-container ql-snow">
-                <div class="ql-editor" v-html="content">
+                <!-- <div class="ql-editor" v-html="content"> -->
+                <div class="ql-editor" v-html="$route.query.rowInfo.subContext">
                 </div>
             </div>
         </div>
@@ -64,6 +65,7 @@ export default {
     },
     data() {
         return {
+            homeworkCon: {},
             homeworkResForm: {
                 point: '',
                 desc: ''
@@ -84,6 +86,9 @@ export default {
       resetForm() {
         this.$refs['homeworkResForm'].resetFields();
       }
+    },
+    created() {
+        this.homeworkCon = JSON.parse(this.$route.query.homeworkCon)
     }
 }
 </script>
@@ -100,9 +105,12 @@ export default {
 .qlbox {
     height: 500px;
     width: 90%;
+    /* min-width: 800px; */
     margin-left: 5%;
     display: flex;
     justify-content: center;
-    
+}
+.ql-container {
+    width: 90%;
 }
 </style>

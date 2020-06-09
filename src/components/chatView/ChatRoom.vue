@@ -235,6 +235,7 @@ export default {
     background-color: #EBEEF5;
     margin: 10px;
     border-radius: 10px;
+    word-break: break-all;
 }
 .msgdate{
     font-size: 10px;

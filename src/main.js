@@ -14,6 +14,7 @@ import './assets/global.css'
 Vue.config.productionTip = true
 
 axios.defaults.baseURL = 'http://localhost:81'//测试用
+// axios.defaults.baseURL = 'http://39.97.119.247:81'//测试2
 Vue.prototype.$http = axios
 
 Vue.use(new VueSocketIo({

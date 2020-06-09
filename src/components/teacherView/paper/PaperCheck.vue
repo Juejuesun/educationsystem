@@ -2,11 +2,11 @@
     <div>
         <div>
           <span class="backbtn" @click="$router.back()"><i class="fa fa-long-arrow-left"></i></span>
-          <span>作业号：{{$route.query.homeworkCon.id}}</span>
+          <span>作业号：{{prerow.workId}}</span>
         </div>
         <el-divider></el-divider>
         <el-table
-            :data="tableData"
+            :data="teaList"
             stripe
             style="width: 100%">
             <el-table-column
@@ -21,13 +21,13 @@
             </el-table-column>
           <el-table-column label="提交状况">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.subState">已提交</el-tag>
+              <el-tag v-if="scope.row.subState==1">已提交</el-tag>
               <el-tag v-else type="danger">未提交</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="批改状况">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.checkState">{{ scope.row.point }} 分</el-tag>
+              <el-tag v-if="scope.row.checkState==1">{{ scope.row.point }} 分</el-tag>
               <el-tag v-else type="warning">未批改</el-tag>
             </template>
           </el-table-column>
@@ -41,9 +41,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     data() {
       return {
+        prerow: {},
         tableData: [
         {
           stuNum: '1234567',
@@ -71,6 +74,9 @@ export default {
         }]
       }
     },
+    computed: {
+      ...mapState(['teaList'])
+    },
     methods: {
       checking(row) {
         console.log(row)
@@ -82,6 +88,9 @@ export default {
                 }
             })
       }
+    },
+    created() {
+      this.prerow = JSON.parse(this.$route.query.homeworkCon)
     }
 }
 </script>

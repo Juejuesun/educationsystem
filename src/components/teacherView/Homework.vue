@@ -4,7 +4,7 @@
             <el-input v-model="search" style="width: 200px; margin-right: 80px;" size="mini" placeholder="输入关键字搜索"  clearable/>
         </div>        
         <el-table
-        :data="homeworkList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase())|| data.desc.toLowerCase().includes(search.toLowerCase()))"
+        :data="homeworkList.filter(data => !search || data.workTitle.toLowerCase().includes(search.toLowerCase())|| data.workContext.toLowerCase().includes(search.toLowerCase()))"
         style="width: 100%;"
         
         @cell-mouse-enter="mouseEnter"
@@ -18,13 +18,13 @@
             <template slot-scope="props">
                 <el-form label-position="left" class="demo-table-expand">
                 <el-form-item label="作业名称：">
-                    <span>{{ props.row.name }}</span>
+                    <span>{{ props.row.workTitle }}</span>
                 </el-form-item>
                 <el-form-item label="截止日期：">
-                    <span>{{ props.row.ddl }}</span>
+                    <span>{{ props.row.date }}</span>
                 </el-form-item>
                 <el-form-item label="作业内容：">
-                    <span>{{ props.row.desc }}</span>
+                    <span>{{ props.row.workContext }}</span>
                 </el-form-item>
                 <el-form-item label="作业图片：">
                     <!-- <span><img v-for="(img, index) in props.row.imgs" :key="index" :src="img" /></span> -->
@@ -45,15 +45,15 @@
             </el-table-column>
             <el-table-column
             label="作业号"
-            prop="id">
+            prop="workId">
             </el-table-column>
             <el-table-column
             label="作业名称"
-            prop="name">
+            prop="workTitle">
             </el-table-column>
             <el-table-column
             label="截止日期"
-            prop="ddl">
+            prop="date">
             </el-table-column>
 
             <el-table-column>
@@ -86,10 +86,10 @@
                 <div>
                     <el-form ref="form" :model="form" label-width="80px">
                         <el-form-item label="作业名称">
-                            <el-input v-model="form.name"></el-input>
+                            <el-input v-model="form.workTitle"></el-input>
                         </el-form-item>
                         <el-form-item label="作业内容">
-                            <el-input type="textarea" v-model="form.desc"></el-input>
+                            <el-input type="textarea" v-model="form.workContext"></el-input>
                         </el-form-item>
                         <el-form-item label="上传图片">
                            <el-upload
@@ -105,10 +105,10 @@
                             </el-dialog>
                         </el-form-item>
                         <el-form-item label="作业号" style="width: 50%;">
-                            <el-input v-model="form.id"></el-input>
+                            <el-input v-model="form.workId"></el-input>
                         </el-form-item>
                         <el-form-item label="截止时间">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="form.ddl" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
+                            <el-date-picker type="date" placeholder="选择日期" v-model="form.date" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="onSubmit">立即创建</el-button>
@@ -131,13 +131,13 @@
                 <div>
                     <el-form ref="form" :model="form" label-width="80px">
                         <el-form-item label="作业名称">
-                            <el-input v-model="form.name"></el-input>
+                            <el-input v-model="form.workTitle"></el-input>
                         </el-form-item>
                         <el-form-item label="作业内容">
-                            <el-input type="textarea" v-model="form.desc"></el-input>
+                            <el-input type="textarea" v-model="form.workContext"></el-input>
                         </el-form-item>
                         <el-form-item label="截止时间">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="form.ddl" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
+                            <el-date-picker type="date" placeholder="选择日期" v-model="form.date" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="editDone">确认修改</el-button>
@@ -166,10 +166,10 @@ export default {
             EditVisible: false,
             rowIndex: 0,
             form: {
-                id: '12987127',
-                name: '第九章作业',
-                ddl: '2020-06-02',
-                desc: '哈哈哈哈哈哈哈哈哈哈',
+                workId: '12987127',
+                workTitle: '第九章作业',
+                date: '2020-06-02',
+                workContext: '哈哈哈哈哈哈哈哈哈哈',
                 imgs: [],
                 isShow: false
             },
@@ -192,17 +192,17 @@ export default {
                 },
                 {
                     id: '12987125',
-                    name: '第六章作业',                    
+                    name: '第六章作业',
                     desc: '荷兰优质淡奶，奶香浓而不腻',
-                    imgs: [],                 
+                    imgs: [],
                     ddl: '2020-05-28',
                     isShow: false
                 },
                 {
                     id: '12987126',
-                    name: '第五章作业',                   
+                    name: '第五章作业',
                     desc: '荷兰优质淡奶，奶香浓而不腻',
-                    imgs: [],                 
+                    imgs: [],
                     ddl: '2020-04-31',
                     isShow: false
                 }
@@ -296,6 +296,7 @@ export default {
                 name: 'DetailPage',
                 query:{row: row}
             })
+            this.$store.dispatch('detailList', row.workId)
         }
     },
     watch: {

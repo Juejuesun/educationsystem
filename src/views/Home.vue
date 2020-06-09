@@ -7,10 +7,10 @@
                     <div class="classdrown">
                         <el-dropdown trigger="click">
                         <span class="el-dropdown-link">
-                            {{thisclass}}<i class="el-icon-arrow-down el-icon--right"></i>
+                            {{teaClassInfo.defaultName}}<i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown" style="width: 150px;">
-                            <el-dropdown-item v-for="(aclass,index) in classmsg" :key="index" @click.native="changeclass(aclass)">{{aclass}}</el-dropdown-item>
+                            <el-dropdown-item v-for="(aclass, index) in teaClassInfo.classList" :key="index" @click.native="changeclass(aclass)">{{aclass.grade}}年级{{aclass.class}}班{{aclass.subjectName}}</el-dropdown-item>
                             <!-- <el-dropdown-item>三年级2班</el-dropdown-item>
                             <el-dropdown-item>四年级3班</el-dropdown-item> -->
                             <el-divider></el-divider>
@@ -106,6 +106,8 @@
 <script>
 import AddNew from '../components/teacherView/AddNew'
 import Headers from '../components/Headers'
+import { mapState } from 'vuex'
+
 export default {
     components: {
         AddNew,
@@ -113,19 +115,27 @@ export default {
     },
     data() {
         return {
-            classmsg: [
-                '六年级1班语文',
-                '三年级2班数学',
-                '四年级3班英语'
-            ],
-            thisclass: '六年级1班语文',
+            // classmsg: [
+            //     '六年级1班语文',
+            //     '三年级2班数学',
+            //     '四年级3班英语'
+            // ],
+            // thisclass: '6年级1班语文',
             defpages: 1,
             dialogTableVisible: false
         }
     },
+    computed: {
+        ...mapState(['teaClassInfo'])
+    },
     methods: {
-        changeclass(aclass) {
-            this.thisclass = aclass
+        async changeclass(aclass) {
+            this.teaClassInfo.defaultInfo = aclass
+            this.teaClassInfo.defaultName = `${aclass.grade}年级${aclass.class}班${aclass.subjectName}`
+            // this.thisclass = `${aclass.grade}年级${aclass.class}班${aclass.subjectName}`
+            let {data: res} = await this.$http.post('/teacher/getWorksOfSubject', {id: aclass.subjectId})//切换
+            console.log(res.data)
+            this.$store.dispatch('pushChangeClass', res.data)
         },
         changepages(data) {
             this.defpages = data

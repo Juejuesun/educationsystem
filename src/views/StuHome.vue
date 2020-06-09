@@ -7,10 +7,10 @@
                     <div class="classdrown">
                         <el-dropdown trigger="click">
                         <span class="el-dropdown-link">
-                            {{thisclass}}<i class="el-icon-arrow-down el-icon--right"></i>
+                            {{stuClassInfo.defaultName}}<i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown" style="width: 150px;">
-                            <el-dropdown-item v-for="(aclass,index) in classmsg" :key="index" @click.native="changeclass(aclass)">{{aclass}}</el-dropdown-item>
+                            <el-dropdown-item v-for="(aclass, index) in stuClassInfo.classList" :key="index" @click.native="changeclass(aclass)">{{aclass.subjectName}}</el-dropdown-item>
                             <!-- <el-dropdown-item>三年级2班</el-dropdown-item>
                             <el-dropdown-item>四年级3班</el-dropdown-item> -->
                         </el-dropdown-menu>
@@ -51,8 +51,8 @@
                 <!-- 第2部分 -->
                 <div style="padding: 0; padding-left: 25px;" v-else class="animated bounceInRight">
                     <h2>信息</h2>
-                    <div class="tecInfoBox">老师: {{teacherName}}</div>
-                    <div class="taskNumBox">需提交的作业数: {{taskNum}}</div>
+                    <div class="tecInfoBox">老师: {{stuClassInfo.defaultInfo.teacherName}}</div>
+                    <div class="taskNumBox">需提交的作业数: {{stuClassInfo.defaultInfo.shouldSubmit}}</div>
                     
                 </div>
                 <div class="footbox">
@@ -79,6 +79,8 @@
 
 <script>
 import Headers from '../components/Headers'
+import { mapState } from 'vuex'
+
 export default {
     components: {
         Headers
@@ -96,11 +98,15 @@ export default {
             taskNum: 4
         }
     },
+    computed: {
+        ...mapState(['stuClassInfo'])
+    },
     methods: {
         changeclass(aclass) {
-            this.thisclass = aclass
+            this.stuClassInfo.defaultName = aclass.subjectName
+            this.stuClassInfo.defaultInfo = aclass
         },
-        changepages(data) {
+        changepages(data) { 
             this.defpages = data
         },
         openSet() {

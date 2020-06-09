@@ -1,4 +1,4 @@
-import { PUSH_INFO, SHOW_SEARCH, PUSH_WORK } from './mutation-types'
+import { PUSH_INFO, SHOW_SEARCH, PUSH_WORK, PUSH_CHANGE_CLASS, DETAUL_LIST } from './mutation-types'
 
 export default{
     pushInfo({commit}, loginInfo) {
@@ -10,5 +10,11 @@ export default{
     },
     pushWork({commit}, cons) {
         commit(PUSH_WORK, {cons})
+    },
+    pushChangeClass({commit}, list) {
+        commit(PUSH_CHANGE_CLASS, list)
+    },
+    detailList({commit}, id) {
+        commit(DETAUL_LIST, {id})
     }
 }

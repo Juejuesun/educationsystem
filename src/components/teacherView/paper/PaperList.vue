@@ -3,21 +3,21 @@
         <p>作业列表</p>
         <el-divider></el-divider>
         <el-table
-            :data="tableData"
+            :data="homeworkList"
             stripe
             style="width: 100%">
             <el-table-column
-            prop="id"
+            prop="workId"
             label="作业号"
             width="180">
             </el-table-column>
             <el-table-column
-            prop="name"
-            label="姓名"
+            prop="workTitle"
+            label="作业名称"
             width="180">
             </el-table-column>
             <el-table-column
-            prop="ddl"
+            prop="date"
             label="截止日期">
             </el-table-column>
             <el-table-column label="操作">
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     data() {
         return {
@@ -67,11 +69,14 @@ export default {
             ]
         }
     },
+    computed: {
+        ...mapState(['homeworkList'])
+    },
     methods: {
         checkWork(index, row) {
             this.$router.push({
                 name: 'PaperCheck',
-                query:{homeworkCon: row}
+                query:{homeworkCon: JSON.stringify(row)}
             })
         }
     }
