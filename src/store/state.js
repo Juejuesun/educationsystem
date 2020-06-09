@@ -21,6 +21,7 @@ export default{
         defaultInfo: {},
         classList: []
     },
+    stuHomeworkList: [],//学生端 作业提交详情
     homeworkList: [
         {
             workId: "31865",
@@ -54,4 +55,5 @@ export default{
             isShow: false
         }
     ],
+    memberList: []
 }

@@ -141,6 +141,7 @@ export default {
             this.defpages = data
         },
         openSet() {
+            this.$store.dispatch('getClassmates')
             this.$router.push('/classsetting');
         }
     }

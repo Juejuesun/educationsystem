@@ -3,26 +3,26 @@
         <p>提交列表</p>
         <el-divider></el-divider>
         <el-table
-            :data="tableData"
+            :data="stuHomeworkList"
             stripe
             style="width: 100%">
             <el-table-column
-            prop="id"
+            prop="workId"
             label="作业号"
             width="180">
             </el-table-column>
             <el-table-column
-            prop="name"
-            label="姓名"
+            prop="workTitle"
+            label="作业标题"
             width="180">
             </el-table-column>
             <el-table-column
-            prop="ddl"
+            prop="workCloseTime"
             label="截止日期">
             </el-table-column>
             <el-table-column label="提交状况">
                 <template slot-scope="scope">
-                    <el-tag v-if="scope.row.subState">已提交</el-tag>
+                    <el-tag v-if="scope.row.subState==1">已提交</el-tag>
                     <el-tag v-else type="danger">未提交</el-tag>
                 </template>
             </el-table-column>
@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     data() {
         return {
@@ -87,6 +89,9 @@ export default {
                 }
             ]
         }
+    },
+    computed: {
+        ...mapState([ 'stuHomeworkList' ])
     },
     methods: {
         subWork(index, row) {

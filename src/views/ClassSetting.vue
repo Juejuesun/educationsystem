@@ -29,15 +29,15 @@
             <div style="margin-left: 50px;">
                 <el-table
                 ref="multipleTable"
-                :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase())|| data.stuNum.toLowerCase().includes(search.toLowerCase()))"
+                :data="memberList.filter(data => !search || data.studentName.toLowerCase().includes(search.toLowerCase())|| data.studentId.toLowerCase().includes(search.toLowerCase()))"
                 tooltip-effect="dark"
                 style="width: 100%"
                 @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="55"></el-table-column>
                     <el-table-column label="姓名" width="120">
-                        <template slot-scope="scope">{{ scope.row.name }}</template>
+                        <template slot-scope="scope">{{ scope.row.studentName }}</template>
                     </el-table-column>
-                    <el-table-column prop="stuNum" label="学号"  show-overflow-tooltip> </el-table-column>
+                    <el-table-column prop="studentId" label="学号"  show-overflow-tooltip> </el-table-column>
                     <!-- <el-table-column prop="address" label="地址" show-overflow-tooltip> </el-table-column> -->
                 </el-table>
             </div>
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import AddNew from './AddNew'
+import AddNew from '../components/teacherView/AddNew'
 import { mapState} from 'vuex'
 
 export default {
@@ -87,7 +87,7 @@ export default {
         }
     },
     computed: {
-        ...mapState([ 'userInfo' ])
+        ...mapState([ 'userInfo', 'memberList' ])
     },
     methods: {
         leftback() {

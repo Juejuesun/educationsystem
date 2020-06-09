@@ -5,21 +5,21 @@
             <el-input v-model="search" style="width: 200px; margin-right: 80px;" size="mini" placeholder="输入关键字搜索"  clearable/>
         </div>        
         <el-table
-        :data="homeworkList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase())|| data.desc.toLowerCase().includes(search.toLowerCase()))"
+        :data="stuHomeworkList.filter(data => !search || data.workTitle.toLowerCase().includes(search.toLowerCase())|| data.workContext.toLowerCase().includes(search.toLowerCase()))"
         style="width: 100%;"
         @cell-mouse-enter="mouseEnter"
         @cell-mouse-leave="mouseLeave">
             <el-table-column type="expand">
                 <template slot-scope="props">
                     <el-form label-position="left" class="demo-table-expand">
-                        <el-form-item label="作业名称：">
-                            <span>{{ props.row.name }}</span>
+                        <el-form-item label="作业标题：">
+                            <span>{{ props.row.workTitle }}</span>
                         </el-form-item>
                         <el-form-item label="截止日期：">
-                            <span>{{ props.row.ddl }}</span>
+                            <span>{{ props.row.workCloseTime }}</span>
                         </el-form-item>             
                         <el-form-item label="作业内容：">
-                            <span>{{ props.row.desc }}</span>
+                            <span>{{ props.row.workContext }}</span>
                         </el-form-item>
                         <el-form-item label="作业图片：">
                             <!-- <span><img v-for="(img, index) in props.row.imgs" :key="index" :src="img" /></span> -->
@@ -40,15 +40,15 @@
             </el-table-column>
             <el-table-column
             label="作业号"
-            prop="id">
+            prop="workId">
             </el-table-column>
             <el-table-column
-            label="作业名称"
-            prop="name">
+            label="作业标题"
+            prop="workTitle">
             </el-table-column>
             <el-table-column
             label="截止日期"
-            prop="ddl">
+            prop="workCloseTime">
             </el-table-column>
 
             <el-table-column label="操作">
@@ -73,7 +73,7 @@ export default {
         }
     },
     computed: {
-        ...mapState([ 'homeworkList' ])
+        ...mapState([ 'stuHomeworkList' ])
     },
     methods: {
         mouseEnter(row) {
@@ -86,7 +86,7 @@ export default {
             console.log(index, row)
             this.$router.push({
                 name: 'SubDetil',
-                query:{ rowInfo: row }
+                query:{ rowInfo: JSON.stringify(row) }
             })
         }
     }

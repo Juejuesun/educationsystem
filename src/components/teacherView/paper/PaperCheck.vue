@@ -83,7 +83,7 @@ export default {
         this.$router.push({
                 name: 'CheckView',
                 query: {
-                  homeworkCon: this.$route.query.homeworkCon,
+                  homeworkCon: this.prerow,
                   rowInfo: row
                 }
             })

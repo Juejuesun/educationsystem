@@ -99,18 +99,22 @@ export default {
         }
     },
     computed: {
-        ...mapState(['stuClassInfo'])
+        ...mapState(['stuClassInfo', 'userInfo'])
     },
     methods: {
-        changeclass(aclass) {
+        async changeclass(aclass) {
             this.stuClassInfo.defaultName = aclass.subjectName
             this.stuClassInfo.defaultInfo = aclass
+            let {data: res} = await this.$http.post('/student/getWorksOfSubject', {studentId: this.userInfo.userId,subjectId: aclass.subjectId})//切换
+            console.log(res.data)
+            this.$store.dispatch('pushChangeClass', res.data)
         },
         changepages(data) { 
             this.defpages = data
         },
         openSet() {
-            this.$router.push('/classsetting');
+            this.$store.dispatch('getClassmates')
+            this.$router.push('/classsetting')
         }
     }
 }

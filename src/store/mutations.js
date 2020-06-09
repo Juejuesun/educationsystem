@@ -1,4 +1,4 @@
-import { PUSH_INFO, SHOW_SEARCH, PUSH_WORK, PUSH_CHANGE_CLASS, DETAUL_LIST } from './mutation-types'
+import { PUSH_INFO, SHOW_SEARCH, PUSH_WORK, PUSH_CHANGE_CLASS, DETAUL_LIST, GET_CLASSMATES } from './mutation-types'
 const moment = require("moment")
 import axios from 'axios'
 
@@ -20,6 +20,8 @@ export default{
         state.stuClassInfo.classList = res.data
         state.stuClassInfo.defaultName = state.stuClassInfo.defaultInfo.subjectName
         //请求列表
+        let {data: res2} = await axios.post('/student/getWorksOfSubject', {studentId: state.userInfo.userId, subjectId: state.stuClassInfo.defaultInfo.subjectId})//切换
+        state.stuHomeworkList = res2.data
       }else {
         const {data: res} = await axios.post('/teacher/getSubjects', dec)
         console.log('列表',res.data)
@@ -80,18 +82,31 @@ export default{
         console.log("response目前返回人数："+state.groupMembers)
     },
     [PUSH_CHANGE_CLASS](state, list) {
-      for(let v of list) {  
-        // console.log(v);
-        v.isShow = false
-      };
-      console.log('处理后的', list)
-      state.homeworkList = list
+      if(state.userInfo.userRoot==1) {
+        state.stuHomeworkList = list
+      }else {
+        for(let v of list) {  
+          // console.log(v);
+          v.isShow = false
+        };
+        console.log('处理后的', list)
+        state.homeworkList = list
+      }
     },
     async [DETAUL_LIST](state, {id}) {
       let {data: res} = await axios.post('/teacher/WorkSubmission', { workId: id})
       if(res) {
         state.teaList = res.data
         console.log(state.teaList)
+      }
+    },
+    async [GET_CLASSMATES](state) {
+      if(state.userInfo.userRoot==1) {
+        let {data: res} = await axios.post('/student/getClassmates',{ studentId: state.userInfo.userId, subjectId: state.stuClassInfo.defaultInfo.subjectId})
+        state.memberList = res.data
+      }else {
+        let {data: res} = await axios.post('/teacher/studentsOfSubject',{ subjectId: state.teaClassInfo.defaultInfo.subjectId})
+        state.memberList = res.data
       }
     }
 }

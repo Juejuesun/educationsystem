@@ -2,12 +2,12 @@
     <div>
         <div>
           <span class="backbtn" @click="$router.back()"><i class="fa fa-long-arrow-left"></i></span>
-          <span>作业号：{{ $route.query.rowInfo.id}}</span>
+          <span>作业号：{{ $route.query.rowInfo.workId}}</span>
         </div>
         <el-divider></el-divider>
         <div>
-            <h4>标题：{{$route.query.rowInfo.name}}</h4>
-            <p>内容：{{$route.query.rowInfo.desc}}</p>
+            <h4>标题：{{$route.query.rowInfo.workTitle}}</h4>
+            <p>内容：{{$route.query.rowInfo.workContext}}</p>
         </div>
         <div style="height: 500px">
                 <quill-editor

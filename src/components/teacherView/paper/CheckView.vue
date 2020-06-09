@@ -6,10 +6,10 @@
         </div>
         <el-divider></el-divider>
         <p>
-            标题：<span>{{homeworkCon.workTitle}}</span>     
+            标题：<span>{{this.$route.query.homeworkCon.workTitle}}</span>     
         </p>
         <p>
-            内容：<span>{{homeworkCon.workContext}}</span>
+            内容：<span>{{this.$route.query.homeworkCon.workContext}}</span>
         </p>
         <el-divider></el-divider>
         <p>
@@ -65,7 +65,6 @@ export default {
     },
     data() {
         return {
-            homeworkCon: {},
             homeworkResForm: {
                 point: '',
                 desc: ''
@@ -86,9 +85,6 @@ export default {
       resetForm() {
         this.$refs['homeworkResForm'].resetFields();
       }
-    },
-    created() {
-        this.homeworkCon = JSON.parse(this.$route.query.homeworkCon)
     }
 }
 </script>
