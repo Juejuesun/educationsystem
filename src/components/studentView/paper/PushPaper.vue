@@ -34,8 +34,8 @@
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-
 import { quillEditor } from 'vue-quill-editor'
+import { mapState } from 'vuex'
 
 export default {
     components: { quillEditor },
@@ -92,6 +92,9 @@ export default {
             },
         }
     },
+    computed: {
+        ...mapState(['userInfo'])
+    },
     methods: {
     onEditorBlur(quill) {
       // 失去焦点事件
@@ -122,7 +125,7 @@ export default {
     //     }
     //   });
     // },
-    handleSave() {
+    async handleSave() {
     //   this.$refs["form"].validate((valid) => {
     //     this.$refs.form.validateField("content", (errorMsg) => {
     //       this.borderColor = "#dcdfe6";
@@ -137,7 +140,36 @@ export default {
     //     }
     //   });
         console.log(this.form.content)
-        this.$store.dispatch('pushWork', this.form)
+        let formData = new FormData()
+        formData.append('submitContext', this.form.content)
+        formData.append('subjectId', this.$route.query.rowInfo.workId)
+        formData.append('studentId', this.userInfo.userId)
+        let asc = {
+            subjectId: this.$route.query.rowInfo.workId,
+            studentId: this.userInfo.userId,
+            submitContext: this.form.content
+        }
+        let config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+        let {data: res} = await this.$http.post('/student/submitWork', asc)
+        console.log(res)
+        if(res.status=='success') {
+            this.$message({
+                message: "提交成功！",
+                type:'success'
+            })
+            this.form.content = ''
+            this.$router.back()
+        }else {
+            this.$message({
+                message: "提交失败！请重试！",
+                type:'error'
+            })
+        }
+        // this.$store.dispatch('pushWork', this.form)
     },
   }
 }
