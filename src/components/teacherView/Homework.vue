@@ -16,7 +16,7 @@
             </el-table-column>
             <el-table-column type="expand">
             <template slot-scope="props">
-                <el-form label-position="left" class="demo-table-expand">
+                <el-form label-position="left" inline class="demo-table-expand">
                 <el-form-item label="作业名称：">
                     <span>{{ props.row.workTitle }}</span>
                 </el-form-item>
@@ -111,8 +111,8 @@
                             <el-date-picker type="date" placeholder="选择日期" v-model="form.date" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="onSubmit">立即创建</el-button>
-                            <el-button @click="dialogTableVisible = false">取消</el-button>
+                            <el-button type="primary" @click="onSubmit">立即发布</el-button>
+                            <el-button @click="cancleSub">取消</el-button>
                         </el-form-item>
                     </el-form>
                     
@@ -136,12 +136,26 @@
                         <el-form-item label="作业内容">
                             <el-input type="textarea" v-model="form.workContext"></el-input>
                         </el-form-item>
+                        <el-form-item label="上传图片">
+                           <el-upload
+                            ref="upload"
+                            action="https://jsonplaceholder.typicode.com/posts/"
+                            list-type="picture-card"
+                            :before-upload="handleBefore"
+                            :on-preview="handlePictureCardPreview"
+                            :on-remove="handleRemove">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                            <el-dialog :visible.sync="dialogVisible" :modal="false">
+                                <img width="100%" :src="dialogImageUrl" alt="">
+                            </el-dialog>
+                        </el-form-item>
                         <el-form-item label="截止时间">
                             <el-date-picker type="date" placeholder="选择日期" v-model="form.date" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="editDone">确认修改</el-button>
-                            <el-button @click="dialogTableVisible = false">取消</el-button>
+                            <el-button @click="cancleSub">取消</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -159,6 +173,7 @@ export default {
             dialogImageUrl: '',
             dialogVisible: false,
             iconBase64: [],
+            tempfile: [],
             search: '',
             multipleSelection: [],
             toShow: false,
@@ -219,21 +234,71 @@ export default {
         //     row.id = '哈哈'
         //     this.isShow = true
         // },
-        handleBefore(file) {
-            console.log(file)
-            let reader = new FileReader()
-            reader.readAsDataURL(file)
-            reader.onload = () => {
-                console.log('file 转 base64结果：' + reader.result)
-                this.iconBase64.push( reader.result)
-                this.form.imgs.push(reader.result)
+        async transforBase(file) {
+            // let temp = ''
+
+            function reader (file) {
+                return new Promise(function (resolve, reject) {
+                    let reader = new FileReader();
+                    reader.readAsDataURL(file)        
+                    reader.onload = function () {
+                        resolve(reader);
+                    };
+                    reader.onerror = reject;
+                });
             }
-            reader.onerror = function (error) {
-                console.log('Error: ', error)
-            }
+
+            let {result: temp} = await reader(file)
+            // console.log('外面',temp)
+            return temp
+            // reader(file)
+            // .then(function (reader) {
+            //     console.log('file 转 base64结果：' + reader.result);
+            //     temp = reader.reader
+            //     console.log('里面'+temp)    
+            // })
+
+            // let reader = new FileReader()
+            
+            // reader.readAsDataURL(file)
+            // reader.onload = () => {
+            //     console.log('file 转 base64结果：' + reader.result)
+            //     this.tempfile.push(reader.result)
+            //     temp = reader.result
+            //     console.log('里面',temp)
+            // }
+            // reader.onerror = function (error) {
+            //     console.log('Error: ', error)
+            // }
+
+            
         },
-        handleRemove(file, fileList) {
+        async handleBefore(file) {
+            console.log(file)
+            let tem = await this.transforBase(file)
+            this.iconBase64.push( tem )
+            // console.log('直接打印',tem)
+            // let reader = new FileReader()
+            // reader.readAsDataURL(file)
+            // reader.onload = () => {
+            //     console.log('file 转 base64结果：' + reader.result)
+            //     this.iconBase64.push( reader.result)
+            //     this.form.imgs.push(reader.result)
+            //     // console.log('第一个',this.iconBase64[0])
+            // }
+            // reader.onerror = function (error) {
+            //     console.log('Error: ', error)
+            // }
+        },
+        async handleRemove(file, fileList) {
             console.log(file, fileList);
+            this.iconBase64 = []
+            for( let v of fileList) {
+                console.log(v)
+                let tem = await this.transforBase(v.raw)
+                this.iconBase64.push( tem )
+            }
+            console.log('移除后',this.iconBase64)
         },
         handlePictureCardPreview(file) {
             this.dialogImageUrl = file.url;
@@ -246,7 +311,10 @@ export default {
             this.EditVisible = true
         },
         editDone() {
+            this.form.imgs = this.iconBase64
             this.homeworkList[this.rowIndex] = this.deepClone(this.form)
+            this.form.imgs = []//清空列表
+            this.iconBase64 = []
             this.EditVisible = false
         },
         handleDelete(index) {
@@ -286,9 +354,20 @@ export default {
         },
         onSubmit() {
             console.log('submit!');
+            this.form.imgs = this.iconBase64
+            console.log(this.iconBase64)
             let item = this.deepClone(this.form)
             this.homeworkList.splice(0,0,item)
+            this.form.imgs = []//清空列表
+            this.iconBase64 = []
             this.dialogTableVisible = false
+        },
+        cancleSub() {
+            this.form.imgs = []//清空列表
+            this.iconBase64 = []
+            this.dialogTableVisible = false,
+            this.EditVisible = false,
+            this.$refs.upload.clearFiles()
         },
         checkWork(index, row) {
             console.log(index, row)
@@ -322,7 +401,7 @@ export default {
 .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
-    width: 50%;
+    width: 100%;
 }
 .headerbtn {
     color: #409EFF;
