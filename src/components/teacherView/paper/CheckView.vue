@@ -6,10 +6,10 @@
         </div>
         <el-divider></el-divider>
         <p>
-            标题：<span>{{this.$route.query.homeworkCon.workTitle}}</span>     
+            标题：<span>{{$route.query.homeworkCon.workTitle}}</span>     
         </p>
         <p>
-            内容：<span>{{this.$route.query.homeworkCon.workContext}}</span>
+            内容：<span>{{$route.query.homeworkCon.workContext}}</span>
         </p>
         <el-divider></el-divider>
         <p>
@@ -19,8 +19,8 @@
         <div class="qlbox">
             <!-- <div v-html="content"></div> -->
             <div class="ql-container ql-snow">
-                <!-- <div class="ql-editor" v-html="content"> -->
-                <div class="ql-editor" v-html="$route.query.rowInfo.subContext">
+                <div class="ql-editor" v-html="content">
+                <!-- <div class="ql-editor" v-html="$route.query.rowInfo.subContext"> -->
                 </div>
             </div>
         </div>
@@ -61,10 +61,11 @@ import { mapState } from 'vuex'
 
 export default {
     computed: {
-        ...mapState(['content'])
+        // ...mapState(['content'])
     },
     data() {
         return {
+            content: '',
             homeworkResForm: {
                 point: '',
                 desc: ''
@@ -72,19 +73,55 @@ export default {
         }
     },
     methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
+        submitForm(formName) {
+        this.$refs[formName].validate( async (valid) => {
+            if (valid) {
+                alert('submit!');
+                let asc = {
+                    studentId: this.$route.query.rowInfo.stuNum,
+                    workId: this.$route.query.homeworkCon.workId,
+                    score: this.homeworkResForm.point,
+                    comment: this.homeworkResForm.desc
+                }
+                let {data: res} = await this.$http.post('/teacher/correctWork', asc)
+                if(res.status=='success') {
+                    this.$message({
+                        message: '发布成功！',
+                        type: 'success'
+                    })
+                }else {
+                    this.$message({
+                        message: '请求失败！',
+                        type: 'error'
+                    })
+                    return false
+                }
+            } else {
+                console.log('error submit!!');
+                this.$message({
+                    message: '请求失败！',
+                    type: 'error'
+                })
+                return false;
+            }
         });
       },
       resetForm() {
         this.$refs['homeworkResForm'].resetFields();
+      },
+      async getWorkContent() {
+          let asc = {
+              studentId: this.$route.query.rowInfo.stuNum,
+              workId: this.$route.query.homeworkCon.workId
+          }
+          let {data: res} = await this.$http.post('/teacher/getSubContext', asc)
+          if(res) {
+              this.content = res.subContext
+          }
       }
+    },
+    created() {
+        this.getWorkContent()
     }
 }
 </script>

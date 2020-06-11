@@ -2,7 +2,7 @@
     <div>
         <div>
           <span class="backbtn" @click="$router.back()"><i class="fa fa-long-arrow-left"></i></span>
-          <span>作业号：{{ preRow.workId}}</span>
+          <span>作业号：{{ preRow.workId }}</span>
         </div>
         <el-divider></el-divider>
         <div>
@@ -16,7 +16,7 @@
             <p>
                 作业成绩
                  <span>
-                    <el-tag v-if="preRow.checkState==1">{{subInfo.point}} 分</el-tag>
+                    <el-tag v-if="preRow.checkState==1">{{preRow.point}} 分</el-tag>
                     <el-tag type="warning" v-else>未批改</el-tag>
                  </span>
             </p>
@@ -36,15 +36,6 @@ export default {
     data() {
         return {
             preRow: {},
-            subInfo: {
-                stuNum: '1234568',
-                name: '张四',
-                subState: false,
-                subDate: '2020-06-01',
-                checkState: true,
-                point: '98',
-                desc: '表现得很好！表现得很好！表现得很好！表现得很好！表现得很好！表现得很好！表现得很好！表现得很好！表现得很好！表现得很好！表现得很好！表现得很好！表现得很好！'
-            }
         }
     },
     methods: {
