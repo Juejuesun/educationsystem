@@ -7,34 +7,34 @@ export default{
       state.userInfo.userId = loginInfo.id
       state.userInfo.userName = loginInfo.name//暂时这样
       state.userInfo.userRoot = loginInfo.identity
-      state.userInfo.userAvatar = loginInfo.avatar
+      state.userInfo.userAvatar = loginInfo.picture
 
       let dec = {
-        id: state.userInfo.userId
+        studentId: state.userInfo.userId
       }
       // 请求列表
       if(state.userInfo.userRoot == 1) {
         const {data: res} = await axios.post('/student/getSubjects', dec)
-        console.log('列表',res.data)
-        state.stuClassInfo.defaultInfo = res.data[0]
-        state.stuClassInfo.classList = res.data
+        console.log('列表',res)
+        state.stuClassInfo.defaultInfo = res[0]
+        state.stuClassInfo.classList = res
         state.stuClassInfo.defaultName = state.stuClassInfo.defaultInfo.subjectName
         //请求列表
-        let {data: res2} = await axios.post('/student/getWorksOfSubject', {studentId: state.userInfo.userId, subjectId: state.stuClassInfo.defaultInfo.subjectId})//切换
-        state.stuHomeworkList = res2.data
+        let {data: res2} = await axios.post('/student/getWorksOfSubject',{studentId: state.userInfo.userId, subjectId: state.stuClassInfo.defaultInfo.subjectId})//切换
+        state.stuHomeworkList = res2
       }else {
-        const {data: res} = await axios.post('/teacher/getSubjects', dec)
-        console.log('列表',res.data)
-        state.teaClassInfo.defaultInfo = res.data[0]
-        state.teaClassInfo.classList = res.data
-        state.teaClassInfo.defaultName =  `${res.data[0].grade}年级${res.data[0].class}班${res.data[0].subjectName}`
-        let {data: res2} = await axios.post('/teacher/getWorksOfSubject', {id: state.teaClassInfo.defaultInfo.subjectId})//切换
-        for(let v of res2.data) {  
+        const {data: res} = await axios.post('/teacher/getSubjects', {teacherId :state.userInfo.userId})
+        console.log('列表',res)
+        state.teaClassInfo.defaultInfo = res[0]
+        state.teaClassInfo.classList = res
+        state.teaClassInfo.defaultName =  `${res[0].grade}年级${res[0].class}班${res[0].subjectName}`
+        let {data: res2} = await axios.post('/teacher/getWorksOfSubject', {subjectId: state.teaClassInfo.defaultInfo.subjectId})//切换
+        for(let v of res2) {  
           // console.log(v);
           v.isShow = false
         };
-        console.log('处理后的', res2.data)
-        state.homeworkList = res2.data
+        console.log('处理后的', res2)
+        state.homeworkList = res2
       }
       
     },
@@ -94,19 +94,19 @@ export default{
       }
     },
     async [DETAUL_LIST](state, {id}) {
-      let {data: res} = await axios.post('/teacher/WorkSubmission', { workId: id})
+      let {data: res} = await axios.post('/teacher/workSubmission', { workId: id})
       if(res) {
-        state.teaList = res.data
+        state.teaList = res
         console.log(state.teaList)
       }
     },
     async [GET_CLASSMATES](state) {
       if(state.userInfo.userRoot==1) {
         let {data: res} = await axios.post('/student/getClassmates',{ studentId: state.userInfo.userId, subjectId: state.stuClassInfo.defaultInfo.subjectId})
-        state.memberList = res.data
+        state.memberList = res
       }else {
         let {data: res} = await axios.post('/teacher/studentsOfSubject',{ subjectId: state.teaClassInfo.defaultInfo.subjectId})
-        state.memberList = res.data
+        state.memberList = res
       }
     }
 }

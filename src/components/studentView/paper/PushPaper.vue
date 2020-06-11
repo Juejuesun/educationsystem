@@ -93,7 +93,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['userInfo'])
+        ...mapState(['userInfo', 'stuClassInfo'])
     },
     methods: {
     onEditorBlur(quill) {
@@ -145,7 +145,8 @@ export default {
         formData.append('subjectId', this.$route.query.rowInfo.workId)
         formData.append('studentId', this.userInfo.userId)
         let asc = {
-            subjectId: this.$route.query.rowInfo.workId,
+            workId: this.$route.query.rowInfo.workId,
+            // subjectId: this.stuClassInfo.defaultInfo.subjectId,
             studentId: this.userInfo.userId,
             submitContext: this.form.content
         }

@@ -21,7 +21,7 @@
                     <span>{{ props.row.workTitle }}</span>
                 </el-form-item>
                 <el-form-item label="截止日期：">
-                    <span>{{ props.row.date }}</span>
+                    <span>{{ props.row.workCloseTime }}</span>
                 </el-form-item>
                 <el-form-item label="作业内容：">
                     <span>{{ props.row.workContext }}</span>
@@ -53,7 +53,7 @@
             </el-table-column>
             <el-table-column
             label="截止日期"
-            prop="date">
+            prop="workCloseTime">
             </el-table-column>
 
             <el-table-column>
@@ -74,7 +74,7 @@
                 <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index)" v-show="scope.row.isShow" style="height: 20px; padding: 5px;" class="animated fadeIn">删除</el-button>
+                @click="handleDelete(scope.$index, scope.row)" v-show="scope.row.isShow" style="height: 20px; padding: 5px;" class="animated fadeIn">删除</el-button>
             </template>
             </el-table-column>
         </el-table>
@@ -108,7 +108,7 @@
                             <el-input v-model="form.workId"></el-input>
                         </el-form-item>
                         <el-form-item label="截止时间">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="form.date" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
+                            <el-date-picker type="date" placeholder="选择日期" v-model="form.workCloseTime" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="onSubmit">立即发布</el-button>
@@ -151,7 +151,7 @@
                             </el-dialog>
                         </el-form-item>
                         <el-form-item label="截止时间">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="form.date" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
+                            <el-date-picker type="date" placeholder="选择日期" v-model="form.workCloseTime" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="editDone">确认修改</el-button>
@@ -183,50 +183,15 @@ export default {
             form: {
                 workId: '12987127',
                 workTitle: '第九章作业',
-                date: '2020-06-02',
+                workCloseTime: '2020-06-02',
                 workContext: '哈哈哈哈哈哈哈哈哈哈',
                 imgs: [],
                 isShow: false
-            },
-            tableData: [
-                {
-                    id: '12987122',
-                    name: '第八章作业',
-                    desc: '荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻荷兰优质淡奶，奶香浓而不腻',
-                    imgs: [],
-                    ddl: '2020-05-31',
-                    isShow: false
-                },
-                {
-                    id: '12987123',
-                    name: '第七章作业',
-                    desc: '荷兰优质淡奶，奶香浓而不腻',
-                    imgs: [],
-                    ddl: '2020-05-30',
-                    isShow: false
-                },
-                {
-                    id: '12987125',
-                    name: '第六章作业',
-                    desc: '荷兰优质淡奶，奶香浓而不腻',
-                    imgs: [],
-                    ddl: '2020-05-28',
-                    isShow: false
-                },
-                {
-                    id: '12987126',
-                    name: '第五章作业',
-                    desc: '荷兰优质淡奶，奶香浓而不腻',
-                    imgs: [],
-                    ddl: '2020-04-31',
-                    isShow: false
-                }
-            ],
-            
+            }
         }
     },
     computed: {
-        ...mapState([ 'homeworkList' ])
+        ...mapState([ 'homeworkList', 'teaClassInfo' ])
     },
     methods: {
         // openDetails (row, column, cell, event) {
@@ -310,16 +275,53 @@ export default {
             this.rowIndex = index
             this.EditVisible = true
         },
-        editDone() {
+        async editDone() {
             this.form.imgs = this.iconBase64
-            this.homeworkList[this.rowIndex] = this.deepClone(this.form)
-            this.form.imgs = []//清空列表
-            this.iconBase64 = []
-            this.EditVisible = false
+
+            // 修改请求, 未含图片
+            let asc = {
+                workId: this.form.workId,
+                workTitle: this.form.workTitle,
+                workContext: this.form.workContext,
+                closeTime: this.form.workCloseTime
+            }
+            let {data: res} = await this.$http.post('/teacher/editWork', asc)
+            if(res.status=='success') {
+                this.homeworkList[this.rowIndex] = this.deepClone(this.form)
+                this.form.imgs = []//清空列表
+                this.iconBase64 = []
+                this.EditVisible = false
+                this.$message({
+                        message: '编辑成功！',
+                        type: 'success'
+                    })
+            }else {
+                this.$message({
+                    message: '请求失败！',
+                    type: 'error'
+                })
+                return false
+            }
         },
-        handleDelete(index) {
+        async handleDelete(index, row) {
             console.log(index);
-            this.homeworkList.splice(index, 1);
+            let asc = {
+                workId: row.workId
+            }
+            let {data: res} = await this.$http.post('/teacher/deleteWork', asc)
+            if(res.status=='success') {
+                this.homeworkList.splice(index, 1);
+                this.$message({
+                    message: '删除成功！',
+                    type: 'success'
+                })
+             }else {
+                this.$message({
+                    message: '请求失败！',
+                    type: 'error'
+                })
+                return false
+            }
         },
         mouseEnter(row) {
             row.isShow = true
@@ -352,15 +354,35 @@ export default {
             }
             return clone;
         },
-        onSubmit() {
+        async onSubmit() {
             console.log('submit!');
             this.form.imgs = this.iconBase64
             console.log(this.iconBase64)
-            let item = this.deepClone(this.form)
-            this.homeworkList.splice(0,0,item)
-            this.form.imgs = []//清空列表
-            this.iconBase64 = []
-            this.dialogTableVisible = false
+            // 发送请求，暂无图片
+            let asc = {
+                subjectId: this.teaClassInfo.defaultInfo.subjectId,
+                workTitle: this.form.workTitle,
+                workContext: this.form.workContext,
+                closeTime: this.form.workCloseTime
+            }
+            let {data: res} = await this.$http.post('/teacher/publishWork', asc)
+            if(res.status=='success') {
+                let item = this.deepClone(this.form)
+                this.homeworkList.splice(0,0,item)
+                this.form.imgs = []//清空列表
+                this.iconBase64 = []
+                this.dialogTableVisible = false
+                this.$message({
+                        message: '发布成功！',
+                        type: 'success'
+                    })
+             }else {
+                this.$message({
+                    message: '请求失败！',
+                    type: 'error'
+                })
+                return false
+            }
         },
         cancleSub() {
             this.form.imgs = []//清空列表

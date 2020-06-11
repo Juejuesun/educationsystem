@@ -11,7 +11,7 @@
         @cell-mouse-leave="mouseLeave">
             <el-table-column type="expand">
                 <template slot-scope="props">
-                    <el-form label-position="left" class="demo-table-expand">
+                    <el-form label-position="left" inline class="demo-table-expand">
                         <el-form-item label="作业标题：">
                             <span>{{ props.row.workTitle }}</span>
                         </el-form-item>
@@ -104,6 +104,6 @@ export default {
 .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
-    width: 50%;
+    width: 100%;
 }
 </style>

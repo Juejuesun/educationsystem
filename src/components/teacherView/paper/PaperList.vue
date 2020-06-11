@@ -17,7 +17,7 @@
             width="180">
             </el-table-column>
             <el-table-column
-            prop="date"
+            prop="workCloseTime"
             label="截止日期">
             </el-table-column>
             <el-table-column label="操作">

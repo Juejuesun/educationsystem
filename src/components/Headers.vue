@@ -2,7 +2,7 @@
     <div class="avabox">
         <div>
             <el-dropdown trigger="click">
-                <el-avatar :src="userInfo.userAvatar">{{userInfo.userName}}</el-avatar>
+                <el-avatar :src="userInfo.userAvatar" fit="scale-down">{{userInfo.userName}}</el-avatar>
                 <el-dropdown-menu slot="dropdown" style="width: 150px;">
                     <el-dropdown-item @click.native="percenter">个人中心</el-dropdown-item>
                     <el-dropdown-item @click.native="logout">退出登陆</el-dropdown-item>

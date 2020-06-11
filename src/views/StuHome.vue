@@ -106,8 +106,8 @@ export default {
             this.stuClassInfo.defaultName = aclass.subjectName
             this.stuClassInfo.defaultInfo = aclass
             let {data: res} = await this.$http.post('/student/getWorksOfSubject', {studentId: this.userInfo.userId,subjectId: aclass.subjectId})//切换
-            console.log(res.data)
-            this.$store.dispatch('pushChangeClass', res.data)
+            console.log(res)
+            this.$store.dispatch('pushChangeClass', res)
         },
         changepages(data) { 
             this.defpages = data

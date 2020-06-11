@@ -133,9 +133,9 @@ export default {
             this.teaClassInfo.defaultInfo = aclass
             this.teaClassInfo.defaultName = `${aclass.grade}年级${aclass.class}班${aclass.subjectName}`
             // this.thisclass = `${aclass.grade}年级${aclass.class}班${aclass.subjectName}`
-            let {data: res} = await this.$http.post('/teacher/getWorksOfSubject', {id: aclass.subjectId})//切换
-            console.log(res.data)
-            this.$store.dispatch('pushChangeClass', res.data)
+            let {data: res} = await this.$http.post('/teacher/getWorksOfSubject', {subjectId: aclass.subjectId})//切换
+            console.log(res)
+            this.$store.dispatch('pushChangeClass', res)
         },
         changepages(data) {
             this.defpages = data

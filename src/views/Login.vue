@@ -45,8 +45,8 @@ export default {
     data () {
         return {
             ruleForm: {
-                id: '12345',
-                password: '12345678',
+                id: '159002',
+                password: '123456',
                 identity: 1,
             },
             rules: {
@@ -55,7 +55,7 @@ export default {
                 ],
                 password: [
                 { required: true, message: '请输入密码', trigger: 'blur' },
-                { min: 8, max: 16, message: '长度在 8 到 16 个字符', trigger: 'blur' }
+                { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' }
                 ]
             }
         }
@@ -72,9 +72,25 @@ export default {
             this.$refs.ruleForm.validate(async (valid) => {
                 if (valid) {
                     console.log(this.ruleForm)
+                    let asc = {
+                        id: this.ruleForm.id,
+                        password: this.ruleForm.password,
+                        identity: this.ruleForm.identity
+                    }
+                    let formData = new FormData()
+                    formData.append('id', this.ruleForm.id)
+                    formData.append('password', this.ruleForm.password)
+                    formData.append('identity', this.ruleForm.identity)
 
-                    const {data: res} = await this.$http.post('/login', this.ruleForm)
-                    console.log(res)
+                    let config = {
+                        headers: {
+                            // 'Content-Type': 'multipart/form-data',
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                    console.log('asc',asc)
+                    const {data: res} = await this.$http.post('/login', asc)
+                    console.log('接收',res)
                     if(res.status === 'success') {
                         res.identity = this.ruleForm.identity
                         this.$store.dispatch('pushInfo', res)
