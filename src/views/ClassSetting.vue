@@ -23,7 +23,10 @@
                 <h3>
                     班级成员
                 </h3>
-                <el-input placeholder="请输入内容" v-model="search" clearable style="width: 200px; margin-right: 80px;"></el-input>
+                <div class="overline">                
+                    <div class="delBtn" @click="delmems" v-show="toShow">删除成员</div>
+                    <el-input placeholder="请输入内容" v-model="search" clearable style="width: 200px; margin-right: 80px; margin-left: 20px;"></el-input>
+                </div>
             </div>
             <el-divider></el-divider>
             <div style="margin-left: 50px;">
@@ -32,11 +35,12 @@
                 :data="memberList.filter(data => !search || data.studentName.toLowerCase().includes(search.toLowerCase())|| data.studentId.toLowerCase().includes(search.toLowerCase()))"
                 tooltip-effect="dark"
                 style="width: 100%"
-                @selection-change="handleSelectionChange">
+                @selection-change="handleSelectionChanges">
                     <el-table-column type="selection" width="55"></el-table-column>
-                    <el-table-column label="姓名" width="120">
+                    <!-- <el-table-column label="姓名" width="120">
                         <template slot-scope="scope">{{ scope.row.studentName }}</template>
-                    </el-table-column>
+                    </el-table-column> -->
+                    <el-table-column prop="studentName" label="姓名"  show-overflow-tooltip> </el-table-column>
                     <el-table-column prop="studentId" label="学号"  show-overflow-tooltip> </el-table-column>
                     <!-- <el-table-column prop="address" label="地址" show-overflow-tooltip> </el-table-column> -->
                 </el-table>
@@ -83,20 +87,87 @@ export default {
                 },
             ],
             multipleSelection: [],
-            search: ''
+            search: '',
+            toShow: false
         }
     },
     computed: {
-        ...mapState([ 'userInfo', 'memberList' ])
+        ...mapState([ 'userInfo', 'memberList', 'teaClassInfo' ])
     },
     methods: {
         leftback() {
             this.$router.go(-1)
         },
-        handleSelectionChange(val) {
+        ssss(val) {
+            console.log('val',val)
+            if(val==0) {
+                this.toShow = false
+            }
+            console.log(this.toShow)
+        },
+        handleSelectionChanges(val) {
             this.multipleSelection = val;
+            // if(val) {
+            //     this.toShow = true
+            // }else {
+            //     this.toShow = false
+            // }
+        },
+        async delmems() {
+            console.log(this.multipleSelection)
+            let asc = {
+                subjectIdOfStudnet: this.teaClassInfo.defaultInfo.subjectId,
+                students: []
+            }
+            for(let v of this.multipleSelection){
+                let s = {
+                    studentId: v.studentId
+                }
+                asc.students.push(s)
+            }
+            console.log('asc',asc)
+            if(this.userInfo.userRoot === 2) {
+                const {data: res} = await this.$http.post('/teacher/deleteStudent', asc)
+                if(res.status == 'success'){
+                    this.$message({
+                        message: '删除成功！',
+                        type: 'warning'
+                    })
+                    // if(this.$route.name == 'ClassSetting') {
+                        this.$store.dispatch('getClassmates')
+                    // }
+                }else {
+                    this.$message({
+                        message: '请求失败！',
+                        type: 'error'
+                    })
+                }
+            }else {
+
+                this.$message({
+                    message: '您无权限！',
+                    type: 'error'
+                })
+                return
+            }
         }
-    }
+    },
+    watch: {
+        'multipleSelection.length': function(newVal) {
+            if(newVal>0) {
+                this.toShow = true
+            }else {
+                this.toShow = false
+            }
+        },
+    },
+    // computed: {
+    //     'toShow': function() {
+    //         if(this.multipleSelection.length>0) {
+    //             return true
+    //         }
+    //     }
+    // }
 }
 </script>
 
@@ -127,5 +198,9 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.delBtn {
+    color: #F56C6C;
+    cursor: pointer;
 }
 </style>

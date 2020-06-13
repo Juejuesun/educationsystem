@@ -86,9 +86,11 @@ export default {
                 let {data: res} = await this.$http.post('/teacher/correctWork', asc)
                 if(res.status=='success') {
                     this.$message({
-                        message: '发布成功！',
+                        message: '批改成功！',
                         type: 'success'
                     })
+                this.$store.dispatch('detailList', this.$route.query.homeworkCon.workId)
+                this.$router.back()
                 }else {
                     this.$message({
                         message: '请求失败！',

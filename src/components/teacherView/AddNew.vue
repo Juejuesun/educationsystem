@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="subbtn">
-            <el-button type="primary" round>添加</el-button>
+            <el-button type="primary" round @click="addOne">添加</el-button>
         </div>
         <el-divider>其他方式</el-divider>
         <div class="subbtn">
@@ -32,6 +32,7 @@
             name="openFile"
             :http-request="uploadFile"
             :before-upload="beforeAvatarUpload"
+            :on-remove="handleRemove"
             :file-list="file"
             :limit="1">
               <el-button size="small" type="primary">点击上传</el-button>
@@ -42,7 +43,7 @@
               <el-button type="info" @click="dialogTableVisible = true" size="mini">查看</el-button>
           </div>
           <div class="subsbth">
-              <el-button type="primary" round>批量导入</el-button>
+              <el-button type="primary" round @click="addSome">批量导入</el-button>
           </div>
         </div>
         <div>
@@ -58,8 +59,8 @@
         <!-- <el-container> -->
           <!-- <el-main> -->
           <el-table :data="stuList" style="width: 100%" :height="tableHeight">
-            <el-table-column property="name" label="姓 名" width="150"></el-table-column>
-            <el-table-column property="stuNum" label="学 号" show-overflow-tooltip></el-table-column>
+            <el-table-column property="studentName" label="姓 名" width="150"></el-table-column>
+            <el-table-column property="studentId" label="学 号" show-overflow-tooltip></el-table-column>
           </el-table>
          <span slot="footer" class="dialog-footer">
           <el-button @click="fullscreenAct">{{btnmsg}}</el-button>
@@ -71,6 +72,7 @@
 
 <script>
 import XLSX from 'xlsx'
+import {mapState} from 'vuex'
 
 export default {
     data() {
@@ -86,6 +88,9 @@ export default {
             btnmsg: '全 屏',
             isfull: false
         }
+    },
+    computed: {
+      ...mapState(['teaClassInfo'])
     },
     methods: {
       beforeAvatarUpload(file) {
@@ -116,8 +121,8 @@ export default {
               // 封装
               sheetArray.map(v => {
                 let obj = {}     
-                obj.name = v.姓名
-                obj.stuNum = v.学号
+                obj.studentName = v.姓名
+                obj.studentId = v.学号
                 this.stuList.push(obj)
               })
               console.log('stulist',this.stuList)
@@ -132,11 +137,63 @@ export default {
       fullscreenAct() {
         this.isfull = !this.isfull
         if(this.isfull) {
-          this.tableHeight = 'null'
+          this.tableHeight = '480px'
           this.btnmsg = '缩 小'
         }else {
           this.tableHeight = '250px'
           this.btnmsg = '全 屏'
+        }
+      },
+      handleRemove(file, fileList) {
+        this.stuList = []
+      },
+      async addOne() {
+        let asc = {
+          subjectIdOfStudnet: this.teaClassInfo.defaultInfo.subjectId,
+          students: [
+            {
+              studentId: this.num,
+              studentName: this.name
+            }
+          ]
+        }
+        let {data: res} = await this.$http.post('/teacher/addStudent', asc)
+        if(res.status == 'success'){
+          this.$message({
+            message: '添加成功！',
+            type: 'success'
+          })
+          this.num = ''
+          this.name = ''
+          if(this.$route.name == 'ClassSetting') {
+            this.$store.dispatch('getClassmates')
+          }
+        }else {
+          this.$message({
+            message: '请求失败！',
+            type: 'error'
+          })
+        }
+      },
+      async addSome() {
+        let asc = {
+          subjectIdOfStudnet: this.teaClassInfo.defaultInfo.subjectId,
+          students: this.stuList
+        }
+        let {data: res} = await this.$http.post('/teacher/addStudent', asc)
+        if(res.status == 'success'){
+          this.$message({
+            message: '添加成功！',
+            type: 'success'
+          })
+          if(this.$route.name == 'ClassSetting') {
+            this.$store.dispatch('getClassmates')
+          }
+        }else {
+          this.$message({
+            message: '请求失败！',
+            type: 'error'
+          })
         }
       }
     }

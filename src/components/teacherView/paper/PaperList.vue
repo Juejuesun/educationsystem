@@ -78,6 +78,7 @@ export default {
                 name: 'PaperCheck',
                 query:{homeworkCon: JSON.stringify(row)}
             })
+            this.$store.dispatch('detailList', row.workId)
         }
     }
 }

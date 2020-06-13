@@ -2,7 +2,7 @@
     <div>
         <div>
             <el-input v-model="search" style="width: 200px; margin-right: 80px;" size="mini" placeholder="输入关键字搜索"  clearable/>
-        </div>        
+        </div>
         <el-table
         :data="homeworkList.filter(data => !search || data.workTitle.toLowerCase().includes(search.toLowerCase())|| data.workContext.toLowerCase().includes(search.toLowerCase()))"
         style="width: 100%;"
@@ -357,13 +357,14 @@ export default {
         async onSubmit() {
             console.log('submit!');
             this.form.imgs = this.iconBase64
-            console.log(this.iconBase64)
+            console.log(this.form.imgs)
             // 发送请求，暂无图片
             let asc = {
                 subjectId: this.teaClassInfo.defaultInfo.subjectId,
                 workTitle: this.form.workTitle,
                 workContext: this.form.workContext,
-                closeTime: this.form.workCloseTime
+                closeTime: this.form.workCloseTime,
+                pictures: this.form.imgs
             }
             let {data: res} = await this.$http.post('/teacher/publishWork', asc)
             if(res.status=='success') {
@@ -375,7 +376,7 @@ export default {
                 this.$message({
                         message: '发布成功！',
                         type: 'success'
-                    })
+                })
              }else {
                 this.$message({
                     message: '请求失败！',

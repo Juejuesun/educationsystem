@@ -163,6 +163,9 @@ export default {
                 type:'success'
             })
             this.form.content = ''
+            let {data: res} = await this.$http.post('/student/getWorksOfSubject', {studentId: this.userInfo.userId,subjectId: this.stuClassInfo.defaultInfo.subjectId})//切换
+            console.log(res)
+            this.$store.dispatch('pushChangeClass', res)
             this.$router.back()
         }else {
             this.$message({
