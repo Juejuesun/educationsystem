@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div>
-                <el-dialog :visible.sync="dialogTableVisible" center :close-on-click-modal="false" :destroy-on-close="true">
+                <el-dialog :visible.sync="dialogTableVisible" center :close-on-click-modal="false" :destroy-on-close="true" @close="closeDia">
                     <template slot="title">
                         <div class="titlebox">更换头像</div>
                     </template>
@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button @click="cancle">取 消</el-button>
                     <el-button type="primary" @click="finish" :loading="loading">确认</el-button>
                 </div>
             </el-dialog>
@@ -95,6 +95,7 @@ export default {
             dialogTableVisible: false,
             dialogVisible: false,
             previewImg: '',
+            oldImg: '',
 
             // 裁剪组件的基础配置option
             option: {
@@ -176,17 +177,53 @@ export default {
                 this.dialogVisible = true
             })
         },
+        cancle() {
+            this.previewImg = this.oldImg
+            this.loading = false
+            this.dialogVisible = false
+        },
+        closeDia() {
+            this.previewImg = this.oldImg
+            this.loading = false
+        },
         finish() {
             this.$refs.cropper.getCropData(async(data) => {
                 var fileName = 'goods' + this.fileinfo.uid
-                // console.log('装酒',data)
+                // console.log('装酒',data)                
                 this.loading = true
                 this.previewImg = data
                 
-                this.userInfo.userAvatar = this.previewImg
-                // this.previewImg = ''
-                this.dialogVisible = false
-                this.loading = false
+                let asc = {
+                    userId: this.userInfo.userId,
+                    userPicture: this.previewImg
+                }
+                let res = {}
+                if(this.userInfo.userRoot===1) {
+                    const {data: ress} = await this.$http.post('/student/updatePicture', asc)
+                    res = ress
+                }else {
+                    const {data: rest} = await this.$http.post('/teacher/updatePicture', asc)
+                    res = rest
+                }
+                console.log(res)
+                if(res.status == 'success') {
+                    this.userInfo.userAvatar = this.previewImg
+                    this.oldImg =  this.userInfo.userAvatar
+                    // this.previewImg =t ''
+                    this.dialogVisible = false
+                    this.loading = false
+                    this.$message({
+                        message: '上传成功！',
+                        type: 'success'
+                    })
+                }else {
+                    this.$message({
+                        message: '上传失败！',
+                        type: 'error'
+                    })
+                    this.previewImg = this.oldImg
+                    this.loading = false
+                }
                 this.dialogTableVisible = false
                 //上传阿里云服务器
                 // client().put(fileName, data).then(result => {
@@ -201,6 +238,7 @@ export default {
     },
     created() {
         this.previewImg = this.userInfo.userAvatar
+        this.oldImg = this.userInfo.userAvatar
     }
 }
 </script>

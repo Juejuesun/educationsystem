@@ -16,8 +16,10 @@ export default{
       if(state.userInfo.userRoot == 1) {
         const {data: res} = await axios.post('/student/getSubjects', dec)
         console.log('列表',res)
-        state.stuClassInfo.defaultInfo = res[0]
-        state.stuClassInfo.classList = res
+        state.userInfo.userClass = res.class
+        state.userInfo.userGrade = res.grade
+        state.stuClassInfo.defaultInfo = res.subjects[0]
+        state.stuClassInfo.classList = res.subjects
         state.stuClassInfo.defaultName = state.stuClassInfo.defaultInfo.subjectName
         //请求列表
         let {data: res2} = await axios.post('/student/getWorksOfSubject',{studentId: state.userInfo.userId, subjectId: state.stuClassInfo.defaultInfo.subjectId})//切换
