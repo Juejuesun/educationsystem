@@ -47,6 +47,8 @@ export default {
             ruleForm: {
                 id: '159002',
                 password: '123456',
+                // id: '',
+                // password: '',
                 identity: 1,
             },
             rules: {

@@ -53,6 +53,25 @@
               <i class="el-icon-back"></i>
             </div>
           </div>
+          <div>
+            <el-popover
+              placement="top-start"
+              width="250"
+              trigger="hover">
+              <div>
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+              </div>
+              <h5>Excel文件中，至少包含以“姓名”、“学号”为键值的数据</h5>
+              <div>
+                <el-image :src="require('@/assets/tipimg.jpg')"></el-image>
+              </div>
+              <!-- <div > -->
+                <i slot="reference"  class="fa fa-question-circle tipBox"></i>
+              <!-- </div> -->
+              <!-- <el-button slot="reference">hover 激活</el-button> -->
+            </el-popover>
+            
+          </div>
         </div>
       </div>
       <el-dialog title="表格内容" center :visible.sync="dialogTableVisible" :modal="false" :fullscreen="isfull">
@@ -205,6 +224,10 @@ export default {
     width: 100%;
     height: 300px;
     border: snow;
+}
+.tipBox {
+  font-size: 20px;
+  color: #606266;
 }
 .inputposition {
     font-size: 15px;

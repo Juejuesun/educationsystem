@@ -31,7 +31,7 @@
                     <span>
                         <!-- <div class="demo-image__preview"> -->
                         <el-image
-                            v-for="(img, index) in props.row.imgs"
+                            v-for="(img, index) in props.row.pictures"
                             :key="index"
                             style="width: 100px; height: 100px; margin-right: 10px;"
                             :src="img" 
@@ -104,9 +104,9 @@
                                 <img width="100%" :src="dialogImageUrl" alt="">
                             </el-dialog>
                         </el-form-item>
-                        <el-form-item label="作业号" style="width: 50%;">
+                        <!-- <el-form-item label="作业号" style="width: 50%;">
                             <el-input v-model="form.workId"></el-input>
-                        </el-form-item>
+                        </el-form-item> -->
                         <el-form-item label="截止时间">
                             <el-date-picker type="date" placeholder="选择日期" v-model="form.workCloseTime" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
                         </el-form-item>
@@ -126,7 +126,7 @@
         <div>
             <el-dialog :visible.sync="EditVisible" center :close-on-click-modal="false" :destroy-on-close="true">
                 <template slot="title">
-                    <div class="titlebox">发布作业</div>
+                    <div class="titlebox">编辑作业</div>
                 </template>
                 <div>
                     <el-form ref="form" :model="form" label-width="80px">
@@ -199,7 +199,7 @@ export default {
         //     row.id = '哈哈'
         //     this.isShow = true
         // },
-        async transforBase(file) {
+        async transforBase(file) { //图片转base64
             // let temp = ''
 
             function reader (file) {
@@ -283,7 +283,8 @@ export default {
                 workId: this.form.workId,
                 workTitle: this.form.workTitle,
                 workContext: this.form.workContext,
-                closeTime: this.form.workCloseTime
+                closeTime: this.form.workCloseTime,
+                pictures: this.form.imgs
             }
             let {data: res} = await this.$http.post('/teacher/editWork', asc)
             if(res.status=='success') {
@@ -364,9 +365,17 @@ export default {
                 workTitle: this.form.workTitle,
                 workContext: this.form.workContext,
                 closeTime: this.form.workCloseTime,
-                pictures: this.form.imgs
+                pictures: []
             }
+            for(let v of this.form.imgs) {
+                let s = {
+                    context: v
+                }
+                asc.pictures.push(s)
+            }
+            // console.log('imgs', asc.pictures)
             let {data: res} = await this.$http.post('/teacher/publishWork', asc)
+            console.log(res)
             if(res.status=='success') {
                 let item = this.deepClone(this.form)
                 this.homeworkList.splice(0,0,item)

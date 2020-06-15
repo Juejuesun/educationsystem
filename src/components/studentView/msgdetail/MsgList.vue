@@ -53,9 +53,11 @@
 
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button
-                    size="mini"
-                    @click="checkWork(scope.$index, scope.row)" style="height: 20px;padding: 5px;" class="animated fadeIn">提交详情</el-button>
+                    <el-badge is-dot :hidden="scope.row.subState==1" class="item">
+                        <el-button
+                        size="mini"
+                        @click="checkWork(scope.$index, scope.row)" style="height: 20px;padding: 5px;" class="animated fadeIn">提交详情</el-button>
+                    </el-badge>
                 </template>
             </el-table-column>
         </el-table>
@@ -105,5 +107,9 @@ export default {
     margin-right: 0;
     margin-bottom: 0;
     width: 100%;
+}
+.item {
+  margin-top: 10px;
+  margin-right: 40px;
 }
 </style>

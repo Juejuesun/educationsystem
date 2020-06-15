@@ -96,86 +96,102 @@ export default {
         ...mapState(['userInfo', 'stuClassInfo'])
     },
     methods: {
-    onEditorBlur(quill) {
-      // 失去焦点事件
+        onEditorBlur(quill) {
+        // 失去焦点事件
 
-    //   this.$refs.form.validateField("content", (errorMsg) => {
-    //     this.borderColor = "#dcdfe6";
-    //     if (errorMsg) {
-    //       this.borderColor = "#F56C6C";
-    //     }
-    //   });
-    },
-    onEditorChange({ quill, html, text }) {
-      // 内容改变事件
-      this.form.content = html;
-    },
-    // handleSee() {
-    //   this.$refs["form"].validate((valid) => {
-    //     this.$refs.form.validateField("content", (errorMsg) => {
-    //       this.borderColor = "#dcdfe6";
-    //       if (errorMsg) {
-    //         this.borderColor = "#F56C6C";
-    //       }
-    //     });
-    //     if (valid) {
-    //       this.dialogTableVisible = true;
-    //     } else {
-    //       return false;
-    //     }
-    //   });
-    // },
-    async handleSave() {
-    //   this.$refs["form"].validate((valid) => {
-    //     this.$refs.form.validateField("content", (errorMsg) => {
-    //       this.borderColor = "#dcdfe6";
-    //       if (errorMsg) {
-    //         this.borderColor = "#F56C6C";
-    //       }
-    //     });
-    //     if (valid) {
-    //       this.$baseMessage("submit!", "success");
-    //     } else {
-    //       return false;
-    //     }
-    //   });
-        console.log(this.form.content)
-        let formData = new FormData()
-        formData.append('submitContext', this.form.content)
-        formData.append('subjectId', this.$route.query.rowInfo.workId)
-        formData.append('studentId', this.userInfo.userId)
-        let asc = {
-            workId: this.$route.query.rowInfo.workId,
-            // subjectId: this.stuClassInfo.defaultInfo.subjectId,
-            studentId: this.userInfo.userId,
-            submitContext: this.form.content
-        }
-        let config = {
-            headers: {
-                'Content-Type': 'multipart/form-data'
+        //   this.$refs.form.validateField("content", (errorMsg) => {
+        //     this.borderColor = "#dcdfe6";
+        //     if (errorMsg) {
+        //       this.borderColor = "#F56C6C";
+        //     }
+        //   });
+        },
+        onEditorChange({ quill, html, text }) {
+            // 内容改变事件
+            this.form.content = html;
+        },
+        // handleSee() {
+        //   this.$refs["form"].validate((valid) => {
+        //     this.$refs.form.validateField("content", (errorMsg) => {
+        //       this.borderColor = "#dcdfe6";
+        //       if (errorMsg) {
+        //         this.borderColor = "#F56C6C";
+        //       }
+        //     });
+        //     if (valid) {
+        //       this.dialogTableVisible = true;
+        //     } else {
+        //       return false;
+        //     }
+        //   });
+        // },
+        async handleSave() {
+        //   this.$refs["form"].validate((valid) => {
+        //     this.$refs.form.validateField("content", (errorMsg) => {
+        //       this.borderColor = "#dcdfe6";
+        //       if (errorMsg) {
+        //         this.borderColor = "#F56C6C";
+        //       }
+        //     });
+        //     if (valid) {
+        //       this.$baseMessage("submit!", "success");
+        //     } else {
+        //       return false;
+        //     }
+        //   });
+            console.log(this.form.content)
+            let formData = new FormData()
+            formData.append('submitContext', this.form.content)
+            formData.append('subjectId', this.$route.query.rowInfo.workId)
+            formData.append('studentId', this.userInfo.userId)
+            let asc = {
+                workId: this.$route.query.rowInfo.workId,
+                // subjectId: this.stuClassInfo.defaultInfo.subjectId,
+                studentId: this.userInfo.userId,
+                submitContext: this.form.content
+            }
+            let config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+            let {data: res} = await this.$http.post('/student/submitWork', asc)
+            console.log(res)
+            if(res.status=='success') {
+                this.$message({
+                    message: "提交成功！",
+                    type:'success'
+                })
+                // this.form.content = ''
+                let {data: res} = await this.$http.post('/student/getWorksOfSubject', {studentId: this.userInfo.userId,subjectId: this.stuClassInfo.defaultInfo.subjectId})//切换
+                console.log(res)
+                this.$store.dispatch('pushChangeClass', res)
+                if(this.$route.query.rowInfo.subState==0){
+                    this.stuClassInfo.defaultInfo.shouldSubmit--
+                }
+                this.$router.back()
+            }else {
+                this.$message({
+                    message: "提交失败！请重试！",
+                    type:'error'
+                })
+            }
+            // this.$store.dispatch('pushWork', this.form)
+        },
+        async getWorkContent() {
+            let asc = {
+                studentId: this.userInfo.userId,
+                workId: this.$route.query.rowInfo.workId
+            }
+            let {data: res} = await this.$http.post('/teacher/getSubContext', asc)
+            if(res) {
+                this.form.content = res.subContext
             }
         }
-        let {data: res} = await this.$http.post('/student/submitWork', asc)
-        console.log(res)
-        if(res.status=='success') {
-            this.$message({
-                message: "提交成功！",
-                type:'success'
-            })
-            this.form.content = ''
-            let {data: res} = await this.$http.post('/student/getWorksOfSubject', {studentId: this.userInfo.userId,subjectId: this.stuClassInfo.defaultInfo.subjectId})//切换
-            console.log(res)
-            this.$store.dispatch('pushChangeClass', res)
-            this.$router.back()
-        }else {
-            this.$message({
-                message: "提交失败！请重试！",
-                type:'error'
-            })
-        }
-        // this.$store.dispatch('pushWork', this.form)
     },
-  }
+    created() {
+        this.getWorkContent()
+    }
 }
 </script>
 
