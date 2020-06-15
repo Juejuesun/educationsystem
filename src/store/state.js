@@ -33,7 +33,7 @@ export default{
             alreadySubmitted: 30,
             date: "2003-07-14",
             isShow: false,
-            imgs: []
+            pictures: []
         },
         {
             id: '12987123',

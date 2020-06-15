@@ -3,6 +3,8 @@
         <div>
           <span class="backbtn" @click="$router.back()"><i class="fa fa-long-arrow-left"></i></span>
           <span>作业号：{{prerow.workId}}</span>
+          <el-divider direction="vertical"></el-divider>
+          <span>已提交：{{prerow.alreadySubmitted}}/{{prerow.shouldSubmit}}</span>
         </div>
         <el-divider></el-divider>
         <el-table

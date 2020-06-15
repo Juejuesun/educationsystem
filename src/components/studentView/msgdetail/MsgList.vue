@@ -22,15 +22,15 @@
                             <span>{{ props.row.workContext }}</span>
                         </el-form-item>
                         <el-form-item label="作业图片：">
-                            <!-- <span><img v-for="(img, index) in props.row.imgs" :key="index" :src="img" /></span> -->
+                            <!-- <span><img v-for="(img, index) in props.row.pictures" :key="index" :src="img" /></span> -->
                             <span>
                                 <!-- <div class="demo-image__preview"> -->
                                 <el-image
-                                    v-for="(img, index) in props.row.imgs"
+                                    v-for="(img, index) in props.row.pictures"
                                     :key="index"
                                     style="width: 100px; height: 100px; margin-right: 10px;"
                                     :src="img" 
-                                    :preview-src-list="props.row.imgs">
+                                    :preview-src-list="props.row.pictures">
                                 </el-image>
                                 <!-- </div> -->
                             </span>

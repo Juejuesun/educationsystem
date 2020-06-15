@@ -5,8 +5,7 @@
         </div>
         <el-table
         :data="homeworkList.filter(data => !search || data.workTitle.toLowerCase().includes(search.toLowerCase())|| data.workContext.toLowerCase().includes(search.toLowerCase()))"
-        style="width: 100%;"
-        
+        style="width: 100%;"        
         @cell-mouse-enter="mouseEnter"
         @cell-mouse-leave="mouseLeave"
         @selection-change="handleSelectionChange">
@@ -27,7 +26,7 @@
                     <span>{{ props.row.workContext }}</span>
                 </el-form-item>
                 <el-form-item label="作业图片：">
-                    <!-- <span><img v-for="(img, index) in props.row.imgs" :key="index" :src="img" /></span> -->
+                    <!-- <span><img v-for="(img, index) in props.row.pictures" :key="index" :src="img" /></span> -->
                     <span>
                         <!-- <div class="demo-image__preview"> -->
                         <el-image
@@ -35,7 +34,7 @@
                             :key="index"
                             style="width: 100px; height: 100px; margin-right: 10px;"
                             :src="img" 
-                            :preview-src-list="props.row.imgs">
+                            :preview-src-list="props.row.pictures">
                         </el-image>
                         <!-- </div> -->
                     </span>
@@ -111,7 +110,7 @@
                             <el-date-picker type="date" placeholder="选择日期" v-model="form.workCloseTime" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="onSubmit">立即发布</el-button>
+                            <el-button :loading="loading" type="primary" @click="onSubmit">立即发布</el-button>
                             <el-button @click="cancleSub">取消</el-button>
                         </el-form-item>
                     </el-form>
@@ -154,7 +153,7 @@
                             <el-date-picker type="date" placeholder="选择日期" v-model="form.workCloseTime" value-format="yyyy-MM-dd" style="width: 50%;"></el-date-picker>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="editDone">确认修改</el-button>
+                            <el-button :loading="loading" type="primary" @click="editDone">确认修改</el-button>
                             <el-button @click="cancleSub">取消</el-button>
                         </el-form-item>
                     </el-form>
@@ -170,6 +169,7 @@ import { mapState } from 'vuex'
 export default {
     data() {
         return {
+            loading: false,
             dialogImageUrl: '',
             dialogVisible: false,
             iconBase64: [],
@@ -185,7 +185,7 @@ export default {
                 workTitle: '第九章作业',
                 workCloseTime: '2020-06-02',
                 workContext: '哈哈哈哈哈哈哈哈哈哈',
-                imgs: [],
+                pictures: [],
                 isShow: false
             }
         }
@@ -248,7 +248,7 @@ export default {
             // reader.onload = () => {
             //     console.log('file 转 base64结果：' + reader.result)
             //     this.iconBase64.push( reader.result)
-            //     this.form.imgs.push(reader.result)
+            //     this.form.pictures.push(reader.result)
             //     // console.log('第一个',this.iconBase64[0])
             // }
             // reader.onerror = function (error) {
@@ -276,20 +276,26 @@ export default {
             this.EditVisible = true
         },
         async editDone() {
-            this.form.imgs = this.iconBase64
-
+            this.loading = true
+            this.form.pictures = this.iconBase64
             // 修改请求, 未含图片
             let asc = {
                 workId: this.form.workId,
                 workTitle: this.form.workTitle,
                 workContext: this.form.workContext,
                 closeTime: this.form.workCloseTime,
-                pictures: this.form.imgs
+                pictures: []
+            }
+            for(let v of this.form.pictures) {
+                let s = {
+                    context: v
+                }
+                asc.pictures.push(s)
             }
             let {data: res} = await this.$http.post('/teacher/editWork', asc)
             if(res.status=='success') {
                 this.homeworkList[this.rowIndex] = this.deepClone(this.form)
-                this.form.imgs = []//清空列表
+                this.form.pictures = []//清空列表
                 this.iconBase64 = []
                 this.EditVisible = false
                 this.$message({
@@ -303,12 +309,16 @@ export default {
                 })
                 return false
             }
+            this.loading = false
         },
         async handleDelete(index, row) {
             console.log(index);
-            let asc = {
-                workId: row.workId
-            }
+            let asc = [
+                {
+                    workId: row.workId
+                }
+            ]
+            
             let {data: res} = await this.$http.post('/teacher/deleteWork', asc)
             if(res.status=='success') {
                 this.homeworkList.splice(index, 1);
@@ -337,16 +347,38 @@ export default {
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
-        delThose() {
-            // this.tableData.splice(this.multipleSelection, this.multipleSelection.length)
-            //数组的批量删除，逆向循环
-            for (let i = this.homeworkList.length - 1; i >= 0; i--) {
-                for (let j = this.multipleSelection.length - 1; j >= 0; j--) {
-                    if (this.homeworkList[i] === this.multipleSelection[j]) {
-                    this.homeworkList.splice(i, 1)
+        async delThose() {
+            let asc = []
+            for(let v of this.multipleSelection) {
+                let s = {
+                    workId: v.workId
+                }
+                asc.push(s)
+            }
+            // console.log(asc)
+            const {data: res} = await this.$http.post('/teacher/deleteWork', asc)
+            if(res.status=='success') {
+                // 数组的批量删除，逆向循环
+                for (let i = this.homeworkList.length - 1; i >= 0; i--) {
+                    for (let j = this.multipleSelection.length - 1; j >= 0; j--) {
+                        if (this.homeworkList[i] === this.multipleSelection[j]) {
+                        this.homeworkList.splice(i, 1)
+                        }
                     }
                 }
+                this.$message({
+                    message: '删除成功！',
+                    type: 'success'
+                })
+
+             }else {
+                this.$message({
+                    message: '请求失败！',
+                    type: 'error'
+                })
+                return false
             }
+            
         },
         deepClone(obj) {
             let clone = {};
@@ -356,9 +388,10 @@ export default {
             return clone;
         },
         async onSubmit() {
+            this.loading = true
             console.log('submit!');
-            this.form.imgs = this.iconBase64
-            console.log(this.form.imgs)
+            this.form.pictures = this.iconBase64
+            console.log(this.form.pictures)
             // 发送请求，暂无图片
             let asc = {
                 subjectId: this.teaClassInfo.defaultInfo.subjectId,
@@ -367,19 +400,20 @@ export default {
                 closeTime: this.form.workCloseTime,
                 pictures: []
             }
-            for(let v of this.form.imgs) {
+            for(let v of this.form.pictures) {
                 let s = {
                     context: v
                 }
                 asc.pictures.push(s)
             }
-            // console.log('imgs', asc.pictures)
+            // console.log('pictures', asc.pictures)
             let {data: res} = await this.$http.post('/teacher/publishWork', asc)
             console.log(res)
             if(res.status=='success') {
+                this.form.workId = res.workId
                 let item = this.deepClone(this.form)
                 this.homeworkList.splice(0,0,item)
-                this.form.imgs = []//清空列表
+                this.form.pictures = []//清空列表
                 this.iconBase64 = []
                 this.dialogTableVisible = false
                 this.$message({
@@ -393,9 +427,10 @@ export default {
                 })
                 return false
             }
+            this.loading = false
         },
         cancleSub() {
-            this.form.imgs = []//清空列表
+            this.form.pictures = []//清空列表
             this.iconBase64 = []
             this.dialogTableVisible = false,
             this.EditVisible = false,

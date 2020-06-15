@@ -45,7 +45,7 @@ export default {
     data () {
         return {
             ruleForm: {
-                id: '159002',
+                id: '123402311',
                 password: '123456',
                 // id: '',
                 // password: '',
@@ -68,6 +68,11 @@ export default {
     methods: {
         handleClick(ang) {
             this.ruleForm.identity = ang
+            if(ang===1) {
+                this.ruleForm.id = '123402311'
+            }else {
+                this.ruleForm.id = '159001'
+            }
         },
         submitForm () {
             // let that = this

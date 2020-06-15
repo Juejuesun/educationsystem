@@ -9,8 +9,8 @@
             <h4>标题：{{$route.query.rowInfo.workTitle}}</h4>
             <p>内容：{{$route.query.rowInfo.workContext}}</p>
         </div>
-        <div style="height: 500px">
-                <quill-editor
+        <div style="height: 500px" class="box">
+                <quill-editor                
                 v-model="form.content"
                 :style="{height: '400px'}"
                 :options="editorOption"
@@ -19,7 +19,7 @@
                 ></quill-editor>  
         </div>
         <div>
-            <el-button type="primary" @click="handleSave">提交</el-button>
+            <el-button :loading="loading" type="primary" @click="handleSave">提交</el-button>
             <el-dialog title="预览效果" :visible.sync="dialogTableVisible">
                 <div style="min-height: 60vh;">
                     <h1 class="news-title">{{ form.title }}</h1>
@@ -41,6 +41,7 @@ export default {
     components: { quillEditor },
     data() {
         return {
+            loading: false,
             borderColor: "#dcdfe6",
             dialogTableVisible: false,
             form: {
@@ -48,47 +49,47 @@ export default {
                 module: "",
                 content: "",
             },
-        editorOption: {
-            placeholder: "",
-            modules: {
-                toolbar: [
-                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                    [{ size: ["small", false, "large", "huge"] }],
-                    ["bold", "italic", "underline", "strike"],
-                    ["blockquote", "code-block"],
-                    [{ list: "ordered" }, { list: "bullet" }],
-                    [{ script: "sub" }, { script: "super" }],
-                    [{ indent: "-1" }, { indent: "+1" }],
-                    [{ direction: "rtl" }],
-                    [{ color: [] }, { background: [] }],
-                    [{ align: [] }],
-                    ["clean"],
-                    ["link", "image", "video"],
-                ],
+            editorOption: {
+                placeholder: "",
+                modules: {
+                    toolbar: [
+                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                        [{ size: ["small", false, "large", "huge"] }],
+                        ["bold", "italic", "underline", "strike"],
+                        ["blockquote", "code-block"],
+                        [{ list: "ordered" }, { list: "bullet" }],
+                        [{ script: "sub" }, { script: "super" }],
+                        [{ indent: "-1" }, { indent: "+1" }],
+                        [{ direction: "rtl" }],
+                        [{ color: [] }, { background: [] }],
+                        [{ align: [] }],
+                        ["clean"],
+                        ["link", "image", "video"],
+                    ],
+                },
             },
-        },
-        rules: {
-            title: [
-            {
-                required: true,
-                message: "请输入标题",
-                trigger: "blur",
-            },
-            ],
-            module: [
-            {
-                required: true,
-                message: "请选择模块",
-                trigger: "change",
-            },
-            ],
-            content: [
+            rules: {
+                title: [
                 {
                     required: true,
-                    message: "请输入内容",
+                    message: "请输入标题",
                     trigger: "blur",
                 },
-            ],
+                ],
+                module: [
+                {
+                    required: true,
+                    message: "请选择模块",
+                    trigger: "change",
+                },
+                ],
+                content: [
+                    {
+                        required: true,
+                        message: "请输入内容",
+                        trigger: "blur",
+                    },
+                ],
             },
         }
     },
@@ -139,6 +140,12 @@ export default {
         //       return false;
         //     }
         //   });
+            this.loading = true
+            this.$loading({
+                text: '提交中',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.box')
+            })
             console.log(this.form.content)
             let formData = new FormData()
             formData.append('submitContext', this.form.content)
@@ -158,10 +165,7 @@ export default {
             let {data: res} = await this.$http.post('/student/submitWork', asc)
             console.log(res)
             if(res.status=='success') {
-                this.$message({
-                    message: "提交成功！",
-                    type:'success'
-                })
+                
                 // this.form.content = ''
                 let {data: res} = await this.$http.post('/student/getWorksOfSubject', {studentId: this.userInfo.userId,subjectId: this.stuClassInfo.defaultInfo.subjectId})//切换
                 console.log(res)
@@ -170,12 +174,17 @@ export default {
                     this.stuClassInfo.defaultInfo.shouldSubmit--
                 }
                 this.$router.back()
+                this.$message({
+                    message: "提交成功！",
+                    type:'success'
+                })
             }else {
                 this.$message({
                     message: "提交失败！请重试！",
                     type:'error'
-                })
+                })                
             }
+            this.loading = false
             // this.$store.dispatch('pushWork', this.form)
         },
         async getWorkContent() {

@@ -43,6 +43,8 @@
       <div>
         <span class="backbtn" @click="$router.back()"><i class="fa fa-long-arrow-left"></i></span>
         <span>作业号：{{$route.query.row.workId}}</span>
+        <el-divider direction="vertical"></el-divider>
+        <span>已提交：{{$route.query.row.alreadySubmitted}}/{{$route.query.row.shouldSubmit}}</span>
       </div>
       <el-button type="primary" size="medium"  @click="isShow = true">
         导出数据

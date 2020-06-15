@@ -124,6 +124,10 @@ export default {
     },
     created() {
         this.getWorkContent()
+        if(this.$route.query.rowInfo.checkState===1) {
+            this.homeworkResForm.point = this.$route.query.rowInfo.point
+            this.homeworkResForm.desc = this.$route.query.rowInfo.comment
+        }
     }
 }
 </script>
