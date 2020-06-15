@@ -26,11 +26,11 @@
                             <span>
                                 <!-- <div class="demo-image__preview"> -->
                                 <el-image
-                                    v-for="(img, index) in props.row.pictures"
+                                    v-for="(img, index) in props.row.imgs"
                                     :key="index"
                                     style="width: 100px; height: 100px; margin-right: 10px;"
                                     :src="img" 
-                                    :preview-src-list="props.row.pictures">
+                                    :preview-src-list="props.row.imgs">
                                 </el-image>
                                 <!-- </div> -->
                             </span>

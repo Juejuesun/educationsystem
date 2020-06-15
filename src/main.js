@@ -6,6 +6,9 @@ import './plugins/element.js'
 import VueSocketIo from 'vue-socket.io'
 import SocketIO from "socket.io-client"
 import axios from 'axios'
+import 'vue-event-calendar/dist/style.css' //1.1.10之后的版本，css被放在了单独的文件中，方便替换
+import vueEventCalendar from 'vue-event-calendar'
+// import vueEventCalendar from '../../dist/index.js'
 
 // 导入全局样式
 import './assets/global.css'
@@ -18,6 +21,10 @@ Vue.config.productionTip = true
 axios.defaults.baseURL = 'http://47.92.202.164:8443'//正式
 
 Vue.prototype.$http = axios
+
+Vue.use(vueEventCalendar, {
+  locale: 'zh'
+})
 
 Vue.use(new VueSocketIo({
   debug: false,

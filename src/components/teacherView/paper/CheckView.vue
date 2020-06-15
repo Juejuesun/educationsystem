@@ -2,7 +2,9 @@
     <div>
         <div>
           <span class="backbtn" @click="$router.back()"><i class="fa fa-long-arrow-left"></i></span>
-          <span>学号：{{ $route.query.rowInfo.stuNum }} 姓名：{{$route.query.rowInfo.name}}</span>
+          <span>学号：{{ $route.query.rowInfo.stuNum }}</span>
+          <el-divider direction="vertical"></el-divider>
+            <span>姓名：{{$route.query.rowInfo.name}}</span>
         </div>
         <el-divider></el-divider>
         <p>
@@ -10,6 +12,15 @@
         </p>
         <p>
             内容：<span>{{$route.query.homeworkCon.workContext}}</span>
+        </p>
+        <p>
+            <el-image
+                v-for="(img, index) in $route.query.homeworkCon.pictures"
+                :key="index"
+                style="width: 100px; height: 100px; margin-right: 10px;"
+                :src="img" 
+                :preview-src-list="$route.query.homeworkCon.pictures">
+            </el-image>
         </p>
         <el-divider></el-divider>
         <p>

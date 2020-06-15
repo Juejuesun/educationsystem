@@ -8,6 +8,15 @@
         <div>
             <h4>标题：{{$route.query.rowInfo.workTitle}}</h4>
             <p>内容：{{$route.query.rowInfo.workContext}}</p>
+            <p>
+                <el-image
+                    v-for="(img, index) in $route.query.rowInfo.imgs"
+                    :key="index"
+                    style="width: 100px; height: 100px; margin-right: 10px;"
+                    :src="img" 
+                    :preview-src-list="$route.query.rowInfo.imgs">
+                </el-image>
+            </p>
         </div>
         <div style="height: 500px" class="box">
                 <quill-editor                

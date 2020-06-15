@@ -1,6 +1,7 @@
 <template>
     <div class="avabox">
-        <div>
+        <div class="innerbox">
+            <div class="name">{{userInfo.userName}}</div>
             <el-dropdown trigger="click">
                 <el-avatar :src="userInfo.userAvatar" fit="scale-down">{{userInfo.userName}}</el-avatar>
                 <el-dropdown-menu slot="dropdown" style="width: 150px;">
@@ -44,5 +45,13 @@ export default {
     flex: 1;
     justify-content: flex-end;
     align-items: center;
+}
+.innerbox {
+    display: flex;
+    align-items: center;
+}
+.name {
+    margin-right: 8px;
+    color: #01306e;
 }
 </style>
