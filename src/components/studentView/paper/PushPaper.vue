@@ -8,13 +8,13 @@
         <div>
             <h4>标题：{{$route.query.rowInfo.workTitle}}</h4>
             <p>内容：{{$route.query.rowInfo.workContext}}</p>
-            <p>
+            <p style="margin-left: 3em">
                 <el-image
-                    v-for="(img, index) in $route.query.rowInfo.imgs"
+                    v-for="(img, index) in $route.query.rowInfo.pictures"
                     :key="index"
                     style="width: 100px; height: 100px; margin-right: 10px;"
                     :src="img" 
-                    :preview-src-list="$route.query.rowInfo.imgs">
+                    :preview-src-list="$route.query.rowInfo.pictures">
                 </el-image>
             </p>
         </div>
