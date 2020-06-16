@@ -59,28 +59,13 @@ export default {
   },
   data () {
     return {
-        addVisible: false,
-        form: {
-            date: '',
-            title: '',
-            desc: ''
-        },
-      demoEvents: [{
-        date: '2020/6/15',
-        title: 'Title-1',
-        desc: 'longlonglong description',
-        isShow: false
+      addVisible: false,
+      form: {
+          date: '',
+          title: '',
+          desc: ''
       },
-      {
-        date: '2020/6/24',
-        title: 'Title-2',
-        isShow: false
-      },{
-        date: '2020/7/06',
-        title: 'Title-3',
-        desc: 'description',
-        isShow: false
-      }]
+      demoEvents: []
     }
   },
   created() {
@@ -106,13 +91,21 @@ export default {
       }
       const {data: res} = await this.$http.post('/teacher/getMemo', asc)
       // console.log(res)
-      let aa = this.strToArrChange(res.teacherMemo)//解析
+      if(res.teacherMemo){
+        let aa = this.strToArrChange(res.teacherMemo)//解析
+        return aa
+      }else {
+        return []
+      }
       // console.log('获取',aa)
-      return aa
+      
     },
     async setMemo(arr) {
       let temp = JSON.parse(JSON.stringify(arr))
-      let ss = this.arrToStrChange(temp)//转换
+      let ss = ''
+      if(temp.length!==0) {
+        ss = this.arrToStrChange(temp)//转换
+      }
       let asc = {
         teacherId: this.userInfo.userId,
         teacherMemo: ss
@@ -129,23 +122,31 @@ export default {
       
     },
     async addPlan() {
-      let temp = JSON.parse(JSON.stringify(this.demoEvents))
-      let asc = {
-          date: this.form.date,
-          title: this.form.title,
-          desc: this.form.desc,
-          isShow: false
+      if(this.form.date) {
+        let temp = JSON.parse(JSON.stringify(this.demoEvents))
+        let asc = {
+            date: this.form.date,
+            title: this.form.title,
+            desc: this.form.desc,
+            isShow: false
+        }
+        temp.splice(0,0,asc)
+        
+        let res = await this.setMemo(temp)
+        console.log('addplan', res)
+        if(res.status=='success') {
+          this.form.date = ''
+          this.form.title = ''
+          this.form.desc = ''
+        }
+        this.addVisible = false
+      }else {
+        this.$message({
+          message: '请选择日期！',
+          type: 'error'
+        })
       }
-      temp.splice(0,0,asc)
       
-      let res = await this.setMemo(temp)
-      console.log('addplan', res)
-      if(res.status=='success') {
-        this.form.date = ''
-        this.form.title = ''
-        this.form.desc = ''
-      }
-      this.addVisible = false
     },
     async delPlan(row, index) {
       let aa = JSON.parse(JSON.stringify(this.demoEvents))
