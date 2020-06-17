@@ -32,6 +32,18 @@
                     </el-form-item>
                 </el-form>
                 <div class="boxfooter">
+                    <div>
+                        <el-popover
+                        placement="top"
+                        width="200"
+                        trigger="hover">
+                        <div>
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        </div>
+                        <h3>学生用户，请联系教师取得账号密码。</h3>
+                        <i slot="reference"  class="fa fa-question-circle tipBox"></i>
+                        </el-popover>
+                    </div>
                     <div style="cursor: pointer;" @click="getBack">忘记密码</div>
                 </div>
             </div>
@@ -205,8 +217,8 @@ export default {
 }
 .boxfooter {
     display: flex;
-    justify-content: flex-end;
-
+    justify-content: space-between;
+    align-items: center;
     margin: 0 40px 0 40px;
     color: rgba(94,165,155,1);
     
@@ -214,7 +226,9 @@ export default {
 i {
     margin: 0 15px 0 15px;
 }
-
+.tipBox {
+  font-size: 20px;
+}
 /* 动画 */
 .animates {
     /* grid-column-start: 2; */
