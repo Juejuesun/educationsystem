@@ -51,6 +51,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 #### 基础功能
 
+* 修改、找回密码
 * 查看任务列表
 * 查看作业完成情况
 * 查看班级成员
