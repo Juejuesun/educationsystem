@@ -92,6 +92,7 @@
                         </el-form-item>
                         <el-form-item label="上传图片">
                            <el-upload
+                           ref="uploadpub"
                             action="https://jsonplaceholder.typicode.com/posts/"
                             list-type="picture-card"
                             :before-upload="handleBefore"
@@ -111,7 +112,7 @@
                         </el-form-item>
                         <el-form-item>
                             <el-button :loading="loading" type="primary" @click="onSubmit">立即发布</el-button>
-                            <el-button @click="cancleSub">取消</el-button>
+                            <el-button @click="cancleSub('pub')">取消</el-button>
                         </el-form-item>
                     </el-form>
                     
@@ -154,7 +155,7 @@
                         </el-form-item>
                         <el-form-item>
                             <el-button :loading="loading" type="primary" @click="editDone">确认修改</el-button>
-                            <el-button @click="cancleSub">取消</el-button>
+                            <el-button @click="cancleSub('edt')">取消</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -310,6 +311,7 @@ export default {
                 return false
             }
             this.loading = false
+            this.$refs.upload.clearFiles()
         },
         async handleDelete(index, row) {
             console.log(index);
@@ -416,6 +418,7 @@ export default {
                 this.form.pictures = []//清空列表
                 this.iconBase64 = []
                 this.dialogTableVisible = false
+                this.$refs.uploadpub.clearFiles()
                 this.$message({
                         message: '发布成功！',
                         type: 'success'
@@ -429,12 +432,17 @@ export default {
             }
             this.loading = false
         },
-        cancleSub() {
+        cancleSub(str) {
             this.form.pictures = []//清空列表
             this.iconBase64 = []
-            this.dialogTableVisible = false,
-            this.EditVisible = false,
-            this.$refs.upload.clearFiles()
+            this.dialogTableVisible = false
+            this.EditVisible = false
+            if(str==='pub') {
+                this.$refs.uploadpub.clearFiles()
+            }else {
+                this.$refs.upload.clearFiles()
+            }
+            
         },
         checkWork(index, row) {
             console.log(index, row)

@@ -20,6 +20,9 @@ import PaperCheck from '../components/teacherView/paper/PaperCheck'
 import CheckView from '../components/teacherView/paper/CheckView'
 import SubView from '../components/studentView/paper/SubView'
 import PushPaper from '../components/studentView/paper/PushPaper'
+import InitView from '../components/initclass/InitView'
+import ChangePsd from '../components/ChangePsd'
+import ForgotPsd from '../views/ForgotPsd'
 
 Vue.use(VueRouter)
 
@@ -32,6 +35,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/forgotpsd',
+    name: 'ForgotPsd',
+    component: ForgotPsd
   },
   {
     path: '/home',
@@ -154,6 +162,16 @@ const routes = [
     path: '/percenter',
     name: 'PerCenter',
     component: PerCenter
+  },
+  {
+    path: '/changepsd',
+    name: 'ChangePsd',
+    component: ChangePsd
+  },
+  {
+    path: '/initclass',
+    name: 'InitView',
+    component: InitView,
   }
 ]
 

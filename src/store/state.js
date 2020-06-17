@@ -34,28 +34,14 @@ export default{
             date: "2003-07-14",
             isShow: false,
             pictures: []
-        },
-        {
-            id: '12987123',
-            name: '第七章作业',
-            desc: '荷兰优质淡奶，奶香浓而不腻',
-            ddl: '2020-05-30',
-            isShow: false
-        },
-        {
-            id: '12987125',
-            name: '第六章作业',                    
-            desc: '荷兰优质淡奶，奶香浓而不腻',                    
-            ddl: '2020-05-28',
-            isShow: false
-        },
-        {
-            id: '12987126',
-            name: '第五章作业',                   
-            desc: '荷兰优质淡奶，奶香浓而不腻',                   
-            ddl: '2020-04-31',
-            isShow: false
         }
     ],
-    memberList: []
+    memberList: [],
+    tempMemberList: [
+        {
+            studentName: 'hah',
+            studentId: '123',
+            isShow: false
+        }
+    ]
 }

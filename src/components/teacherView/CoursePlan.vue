@@ -93,6 +93,9 @@ export default {
       // console.log(res)
       if(res.teacherMemo){
         let aa = this.strToArrChange(res.teacherMemo)//解析
+        for(let v of aa) {
+          v.isShow = false
+        }
         return aa
       }else {
         return []

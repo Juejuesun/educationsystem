@@ -32,7 +32,7 @@
                     </el-form-item>
                 </el-form>
                 <div class="boxfooter">
-                    <div style="cursor: pointer;">忘记密码</div>
+                    <div style="cursor: pointer;" @click="getBack">忘记密码</div>
                 </div>
             </div>
         </div>
@@ -73,6 +73,9 @@ export default {
             }else {
                 this.ruleForm.id = '159001'
             }
+        },
+        getBack() {
+            this.$router.push("/forgotpsd")
         },
         submitForm () {
             // let that = this

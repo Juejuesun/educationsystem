@@ -14,7 +14,7 @@
                             <!-- <el-dropdown-item>三年级2班</el-dropdown-item>
                             <el-dropdown-item>四年级3班</el-dropdown-item> -->
                             <el-divider></el-divider>
-                            <div class="creatbtn">创建班级</div>
+                            <div class="creatbtn" @click="newClass">创建班级</div>
                         </el-dropdown-menu>
                         </el-dropdown>
                     </div>
@@ -143,6 +143,9 @@ export default {
         openSet() {
             this.$store.dispatch('getClassmates')
             this.$router.push('/classsetting');
+        },
+        newClass() {
+            this.$router.push('/initclass');
         }
     }
 }
