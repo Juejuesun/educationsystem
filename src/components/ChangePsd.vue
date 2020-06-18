@@ -90,8 +90,8 @@ export default {
 
             ruleForm: {
                 pass: '',
-                checkPass: '',
-                prePass: ''
+                checkPass: '',//新密码
+                prePass: ''//原密码
             },
         rules: {
           pass: [
@@ -114,11 +114,33 @@ export default {
             this.$router.go(-1)
         },
         submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
+        this.$refs[formName].validate(async (valid) => {
           if (valid) {
-            alert('submit!');
+            let asc = {
+                id: this.userInfo.userId,
+                prePassword: this.ruleForm.prePass,
+                newPassword: this.ruleForm.checkPass,
+                identity: this.userInfo.userRoot
+            }
+            const {data: res} = await this.$http.post('/editPassword', asc)
+            // console.log(res)
+            if(res.status == 'success') {
+                this.$message({
+                    message: '修改成功！',
+                    type: 'success'
+                })
+            }else {
+                this.$message({
+                    message: '修改失败！',
+                    type: 'error'
+                })
+            }
           } else {
-            console.log('error submit!!');
+            this.$message({
+                message: '请求失败！',
+                type: 'error'
+            })
+            this.$refs[formName].resetFields();
             return false;
           }
         });

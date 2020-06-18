@@ -5,12 +5,18 @@
                 <i class="fa fa-long-arrow-left" style="margin-right: 10px;"></i>
                 <span>班级</span>
             </div>
-            <div class="classname">{{pageTitle}}</div>
+            <div class="classname">{{teaClassInfo.defaultName}}</div>
         </el-header>
         <el-main class="mainbox">
-            <div class="plusbtn">
-                <!-- <i class="fa fa-user-plus iconclass"  @click="dialogTableVisible = true"></i> -->
-                <el-button :disabled="userInfo.userRoot===1" type="primary" icon="fa fa-user-plus" circle @click="dialogTableVisible = true"></el-button>
+            <div class="subInfoLine">
+                <div>
+                    <h4>课程号：{{teaClassInfo.defaultInfo.subjectId}}</h4>
+                </div>
+                <div class="plusbtn">
+                    <!-- <i class="fa fa-user-plus iconclass"  @click="dialogTableVisible = true"></i> -->
+                    <el-button v-show="userInfo.userRoot===2" type="danger" icon="el-icon-delete" circle @click="dismissClass"></el-button>
+                    <el-button :disabled="userInfo.userRoot===1" type="primary" icon="fa fa-user-plus" circle @click="dialogTableVisible = true"></el-button>
+                </div>
             </div>
             <!-- 模态框 -->
             <el-dialog :visible.sync="dialogTableVisible" center :close-on-click-modal="false" :destroy-on-close="true">
@@ -88,12 +94,12 @@ export default {
             this.$router.go(-1)
         },
         getPageTitle() {
-            let grad = ['一', '二', '三', '四', '五', '六', '七', '八', '九']
-            if(this.userInfo.userRoot==1) {
-                this.pageTitle = `${grad[this.userInfo.userGrade-1]}年级${this.userInfo.userClass}班`
-            }else {
+            // let grad = ['一', '二', '三', '四', '五', '六', '七', '八', '九']
+            // if(this.userInfo.userRoot==1) {
+            //     this.pageTitle = `${grad[this.userInfo.userGrade-1]}年级${this.userInfo.userClass}班`
+            // }else {
                this.pageTitle = this.teaClassInfo.defaultName
-            }
+            // }
         },
         mouseEnter(row) {
             console.log(row)
@@ -168,6 +174,22 @@ export default {
                 })
                 return
             }
+        },
+        async dismissClass() {
+            let asc = {
+                subjectId: this.teaClassInfo.defaultInfo.subjectId
+            }
+            const {data: res} = await this.$http.post('/teacher/dismissClass', asc)
+            console.log(res)
+            if(res.status == 'success') {
+                this.$message({
+                    message: '删除成功！',
+                    type: 'warning'
+                })
+                const s = 2
+                await this.$store.dispatch('getNewClass', s)
+                this.$router.go(-1)
+            }
         }
     },
     // watch: {
@@ -204,6 +226,10 @@ export default {
 .plusbtn {
     text-align: end;
     margin: 10px;
+}
+.subInfoLine {
+    display: flex;
+    justify-content: space-between;
 }
 .overline {
     display: flex;

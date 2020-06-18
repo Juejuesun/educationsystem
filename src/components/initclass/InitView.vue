@@ -205,12 +205,28 @@ export default {
         cancleSub() {
             this.EditVisible = false
         },
-        subCreat() {//添加请求
+        async subCreat() {//添加请求
             if(this.setClassName) {
-                this.$message({
-                    type: 'success',
-                    message: '创建成功'
-                });
+                let asc = {
+                    teacherIdOfSubject: this.userInfo.userId,
+                    theSubject: this.setClassName
+                }
+                const {data: res} = await this.$http.post('/teacher/creatClass', asc)
+                console.log(res)
+                if(res.status=='success') {
+                    const s = 1
+                    await this.$store.dispatch('getNewClass', s)
+                    this.$message({
+                        type: 'success',
+                        message: '创建成功！'
+                    });
+                    this.$router.go(-1)
+                }else {
+                    this.$message({
+                        type: 'error',
+                        message: '请求失败！'
+                    });
+                }
             }else {
                 this.$message({
                     type: 'warning',
@@ -219,7 +235,7 @@ export default {
             }
         },
         creatClass() {
-            this.$confirm('您确定穿件此班级吗？', '提示', {
+            this.$confirm('您确定创建此班级吗？', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'

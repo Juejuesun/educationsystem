@@ -13,6 +13,8 @@
                             <el-dropdown-item v-for="(aclass, index) in stuClassInfo.classList" :key="index" @click.native="changeclass(aclass)">{{aclass.subjectName}}</el-dropdown-item>
                             <!-- <el-dropdown-item>三年级2班</el-dropdown-item>
                             <el-dropdown-item>四年级3班</el-dropdown-item> -->
+                            <el-divider></el-divider>
+                            <div class="creatbtn" @click="dialogTableVisible=true">添加班级</div>
                         </el-dropdown-menu>
                         </el-dropdown>
                     </div>
@@ -20,6 +22,30 @@
                         <i class="el-icon-user-solid iconout"></i>
                         <span>班级成员</span>
                     </div>
+                    <el-dialog :visible.sync="dialogTableVisible" center :close-on-click-modal="false" :destroy-on-close="true" style="width: 80%;">
+                        <template slot="title">
+                            <div class="titlebox">加入课程</div>
+                        </template>
+                        <!-- <AddNew/> -->
+                        <div class="joinclass">
+                            <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
+                                <el-form-item
+                                    label="课程号"
+                                    prop="subId"
+                                    :rules="[
+                                    { required: true, message: '此项不能为空'},
+                                    { type: 'number', message: '课程号必须为数字值'}
+                                    ]"
+                                >
+                                    <el-input style="width: 80%" type="age" v-model.number="numberValidateForm.subId" autocomplete="off" clearable></el-input>
+                                </el-form-item>
+                                <el-form-item>
+                                    <el-button type="primary" @click="submitForm('numberValidateForm')">提交</el-button>
+                                    <el-button @click="resetForm('numberValidateForm')">重置</el-button>
+                                </el-form-item>
+                            </el-form>
+                        </div>
+                    </el-dialog>
                 </div>
                 <!-- 第1部分 -->
                 <div style="padding: 0;" v-if="defpages==1" class="animated bounceInLeft">
@@ -95,7 +121,11 @@ export default {
             thisclass: '语文',
             defpages: 1,
             teacherName: '张伟',
-            taskNum: 4
+            taskNum: 4,
+            dialogTableVisible: false,
+            numberValidateForm: {
+                subId: ''
+            }
         }
     },
     computed: {
@@ -106,7 +136,7 @@ export default {
             this.stuClassInfo.defaultName = aclass.subjectName
             this.stuClassInfo.defaultInfo = aclass
             let {data: res} = await this.$http.post('/student/getWorksOfSubject', {studentId: this.userInfo.userId,subjectId: aclass.subjectId})//切换
-            console.log(res)
+            // console.log(res)
             this.$store.dispatch('pushChangeClass', res)
         },
         changepages(data) { 
@@ -115,7 +145,42 @@ export default {
         openSet() {
             this.$store.dispatch('getClassmates')
             this.$router.push('/classsetting')
-        }
+        },
+        submitForm(formName) {
+            this.$refs[formName].validate(async(valid) => {
+            if (valid) {
+                let asc = {
+                    studentId: this.userInfo.userId,
+                    subjectId: this.numberValidateForm.subId
+                }
+                const {data: res} = await this.$http.post('/student/joinClass', asc)
+                // console.log(res)
+                if(res.status=='success') {
+                    await this.$store.dispatch('pushNewclass')
+                    this.dialogTableVisible = false
+                    this.$message({
+                        message: '加入成功！',
+                        type: 'success'
+                    })
+                }else {
+                    this.$message({
+                        message: '请求失败！',
+                        type: 'error'
+                    })
+                    return false;
+                }
+            } else {
+                this.$message({
+                    message: '请求失败！',
+                    type: 'error'
+                })
+                return false;
+            }
+            });
+        },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      }
     }
 }
 </script>
@@ -204,5 +269,9 @@ export default {
     font-size: 15px;
     color: #F56C6C;
     margin: 10px 0 10px 0;
+}
+.joinclass {
+    display: flex;
+    justify-content: center;
 }
 </style>
