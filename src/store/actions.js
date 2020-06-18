@@ -1,4 +1,4 @@
-import { PUSH_INFO, SHOW_SEARCH, PUSH_WORK, PUSH_CHANGE_CLASS, DETAUL_LIST, GET_CLASSMATES, GET_NEW_CLASS, PUSH_NEWCLASS } from './mutation-types'
+import { PUSH_INFO, SHOW_SEARCH, PUSH_WORK, PUSH_CHANGE_CLASS, DETAUL_LIST, GET_CLASSMATES, GET_NEW_CLASS, PUSH_NEWCLASS, CLEARFILE } from './mutation-types'
 
 export default{
     pushInfo({commit}, loginInfo) {
@@ -25,5 +25,8 @@ export default{
     },
     pushNewclass({commit}) {
         commit(PUSH_NEWCLASS)
+    },
+    clearfile({commit}) {
+        commit(CLEARFILE)
     }
 }

@@ -37,11 +37,5 @@ export default{
         }
     ],
     memberList: [],
-    tempMemberList: [
-        {
-            studentName: 'hah',
-            studentId: '123',
-            isShow: false
-        }
-    ]
+    tempMemberList: []
 }

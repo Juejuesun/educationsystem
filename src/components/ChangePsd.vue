@@ -112,6 +112,7 @@ export default {
     methods: {
         leftback() {
             this.$router.go(-1)
+            this.clearform()
         },
         submitForm(formName) {
         this.$refs[formName].validate(async (valid) => {
@@ -135,6 +136,7 @@ export default {
                     type: 'error'
                 })
             }
+            this.clearform()
           } else {
             this.$message({
                 message: '请求失败！',
@@ -147,6 +149,9 @@ export default {
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      clearform() {
+          this.$refs['ruleForm'].resetFields();
       }
     }
 }

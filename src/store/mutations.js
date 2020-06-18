@@ -1,4 +1,4 @@
-import { PUSH_INFO, SHOW_SEARCH, PUSH_WORK, PUSH_CHANGE_CLASS, DETAUL_LIST, GET_CLASSMATES, GET_NEW_CLASS, PUSH_NEWCLASS } from './mutation-types'
+import { PUSH_INFO, SHOW_SEARCH, PUSH_WORK, PUSH_CHANGE_CLASS, DETAUL_LIST, GET_CLASSMATES, GET_NEW_CLASS, PUSH_NEWCLASS, CLEARFILE } from './mutation-types'
 const moment = require("moment")
 import axios from 'axios'
 
@@ -163,5 +163,8 @@ export default{
       //请求列表
       let {data: res2} = await axios.post('/student/getWorksOfSubject',{studentId: state.userInfo.userId, subjectId: state.stuClassInfo.defaultInfo.subjectId})//切换
       state.stuHomeworkList = res2
+    },
+    [CLEARFILE](state) {
+      state.tempMemberList = []
     }
 }
