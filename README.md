@@ -42,9 +42,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 * 添加日程计划
 * 教师在线批改作业
 * 在线答疑交流
+* 解散课程班级
 
 #### 学生端
 
+* 加入课程班级
 * 提交、编辑作业
 * 查看班级信息
 * 在线交流
