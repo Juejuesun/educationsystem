@@ -46,7 +46,9 @@ import {
   Option,
   Select,
   Radio,
-  RadioGroup
+  RadioGroup,
+  Step,
+  Steps
 } from 'element-ui'
 
 Vue.use(Button)
@@ -91,6 +93,8 @@ Vue.use(Option)
 Vue.use(Select)
 Vue.use(Radio)
 Vue.use(RadioGroup)
+Vue.use(Step)
+Vue.use(Steps)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox
