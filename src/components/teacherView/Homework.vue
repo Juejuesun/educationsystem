@@ -73,7 +73,7 @@
                 <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, scope.row)" v-show="scope.row.isShow" style="height: 20px; padding: 5px;" class="animated fadeIn">删除</el-button>
+                @click="askDelete(scope.$index, scope.row)" v-show="scope.row.isShow" style="height: 20px; padding: 5px;" class="animated fadeIn">删除</el-button>
             </template>
             </el-table-column>
         </el-table>
@@ -313,6 +313,20 @@ export default {
             this.loading = false
             this.$refs.upload.clearFiles()
         },
+        askDelete(index, row) {
+            this.$confirm('此操作将删除该项作业, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.handleDelete(index, row)          
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });          
+            });
+        },
         async handleDelete(index, row) {
             console.log(index);
             let asc = [
@@ -320,7 +334,6 @@ export default {
                     workId: row.workId
                 }
             ]
-            
             let {data: res} = await this.$http.post('/teacher/deleteWork', asc)
             if(res.status=='success') {
                 this.homeworkList.splice(index, 1);

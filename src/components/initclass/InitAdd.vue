@@ -177,7 +177,7 @@ export default {
           this.tempMemberList.push(asc)
           console.log(this.tempMemberList)
           this.$message({
-            message: '添加成功！',
+            message: '导入成功！',
             type: 'success'
           })
           this.num = ''
@@ -203,7 +203,7 @@ export default {
           }
           console.log(this.tempMemberList)
           this.$message({
-            message: '添加成功！',
+            message: '导入成功！',
             type: 'success'
           })
           this.$refs.upload.clearFiles()

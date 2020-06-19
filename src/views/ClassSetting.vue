@@ -14,7 +14,7 @@
                 </div>
                 <div class="plusbtn">
                     <!-- <i class="fa fa-user-plus iconclass"  @click="dialogTableVisible = true"></i> -->
-                    <el-button v-show="userInfo.userRoot===2" type="danger" icon="el-icon-delete" circle @click="dismissClass"></el-button>
+                    <el-button v-show="userInfo.userRoot===2" type="danger" icon="el-icon-delete" circle @click="askDismiss"></el-button>
                     <el-button :disabled="userInfo.userRoot===1" type="primary" icon="fa fa-user-plus" circle @click="dialogTableVisible = true"></el-button>
                 </div>
             </div>
@@ -174,6 +174,20 @@ export default {
                 })
                 return
             }
+        },
+        askDismiss() {
+            this.$confirm('此操作将解散该班级, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.dismissClass()             
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });          
+            });
         },
         async dismissClass() {
             let asc = {

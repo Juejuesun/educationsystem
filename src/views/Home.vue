@@ -145,6 +145,7 @@ export default {
             this.$router.push('/classsetting');
         },
         newClass() {
+            this.$store.dispatch('clearfile')//清楚默认数组
             this.$router.push('/initclass');
         }
     }

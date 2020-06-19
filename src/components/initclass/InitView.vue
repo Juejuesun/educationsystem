@@ -130,7 +130,6 @@ export default {
         leftback() {
             this.$router.go(-1)
             this.setClassName = ''
-            this.$store.dispatch('clearfile')
         },
         mouseEnter(row) {
             row.isShow = true
