@@ -78,7 +78,7 @@
             </el-table-column>
         </el-table>
         <div>
-            <el-dialog :visible.sync="dialogTableVisible" center :close-on-click-modal="false" :destroy-on-close="true">
+            <el-dialog :visible.sync="dialogTableVisible" center :close-on-click-modal="false" :destroy-on-close="true" @close="cancleSub('pub')">
                 <template slot="title">
                     <div class="titlebox">发布作业</div>
                 </template>
@@ -124,7 +124,7 @@
             </el-dialog>
         </div>
         <div>
-            <el-dialog :visible.sync="EditVisible" center :close-on-click-modal="false" :destroy-on-close="true">
+            <el-dialog :visible.sync="EditVisible" center :close-on-click-modal="false" :destroy-on-close="true" @close="cancleSub('edt')">
                 <template slot="title">
                     <div class="titlebox">编辑作业</div>
                 </template>
@@ -299,6 +299,7 @@ export default {
                 this.form.pictures = []//清空列表
                 this.iconBase64 = []
                 this.EditVisible = false
+                this.clearform()
                 this.$message({
                         message: '编辑成功！',
                         type: 'success'
@@ -402,6 +403,12 @@ export default {
             }
             return clone;
         },
+        clearform() {
+            for (let key in this.form) {
+                this.form[key] = ''
+            }
+            this.form.isShow = false
+        },
         async onSubmit() {
             this.loading = true
             console.log('submit!');
@@ -432,6 +439,7 @@ export default {
                 this.iconBase64 = []
                 this.dialogTableVisible = false
                 this.$refs.uploadpub.clearFiles()
+                this.clearform()
                 this.$message({
                         message: '发布成功！',
                         type: 'success'
@@ -450,6 +458,7 @@ export default {
             this.iconBase64 = []
             this.dialogTableVisible = false
             this.EditVisible = false
+            this.clearform()
             if(str==='pub') {
                 this.$refs.uploadpub.clearFiles()
             }else {
