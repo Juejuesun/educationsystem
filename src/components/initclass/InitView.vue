@@ -222,7 +222,7 @@ export default {
                         type: 'success',
                         message: '创建成功！'
                     });
-                    this.$router.go(-1)
+                    this.leftback()
                 }else {
                     this.$message({
                         type: 'error',

@@ -182,10 +182,10 @@ export default {
             EditVisible: false,
             rowIndex: 0,
             form: {
-                workId: '12987127',
-                workTitle: '第九章作业',
-                workCloseTime: '2020-06-02',
-                workContext: '哈哈哈哈哈哈哈哈哈哈',
+                workId: '',
+                workTitle: '',
+                workCloseTime: '',
+                workContext: '',
                 pictures: [],
                 isShow: false
             }

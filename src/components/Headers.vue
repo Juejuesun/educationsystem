@@ -28,14 +28,19 @@ export default {
             this.$router.push('/changepsd')
         },
         logout() {
+            // window.sessionStorage.clear()
+            // window.sessionStorage.setItem('', 'true')//在线交流中使用
             let sta = window.sessionStorage.getItem('FIRSTCRT', 'true')//在线交流中使用
-            console.log(typeof sta)
+            console.log('退出',sta)
             if(sta == 'false') {
                 let transdata = {
                     name: this.userInfo.userName
                 }
                 this.$socket.emit("leave",transdata);
             }
+            window.sessionStorage.clear()
+            // this.$store.replaceState(Object.assign({}, {}))
+            // window.sessionStorage.setItem('FIRSTCRT', 'true')//在线交流中使用
             this.$router.push('/login')
         }
     }

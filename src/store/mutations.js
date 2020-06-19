@@ -5,9 +5,11 @@ import axios from 'axios'
 export default{
     async [PUSH_INFO] (state, {loginInfo}) { //让ADD_TODO变成一个变量
       state.userInfo.userId = loginInfo.id
-      state.userInfo.userName = loginInfo.name//暂时这样
+      state.userInfo.userName = loginInfo.name
       state.userInfo.userRoot = loginInfo.identity
       state.userInfo.userAvatar = loginInfo.picture
+
+      window.sessionStorage.setItem('USERNAME', state.userInfo.userName)
 
       let dec = {
         studentId: state.userInfo.userId
@@ -121,6 +123,7 @@ export default{
       if(solveType==1) {//创建课程
         state.teaClassInfo.defaultInfo = res[res.length-1]
         state.teaClassInfo.classList = res
+        
         // state.teaClassInfo.defaultName =  `${res[0].grade}年级${res[0].class}班${res[0].subjectName}`
         state.teaClassInfo.defaultName = res[res.length-1].subjectName
         //添加学生
@@ -132,10 +135,7 @@ export default{
           }
           let {data: res2} = await axios.post('/teacher/addStudent', asc)
           console.log(res2)
-        }else {
-            return
         }
-
       }else {
         state.teaClassInfo.defaultInfo = JSON.parse(JSON.stringify(res[0]))
         // console.log(state.teaClassInfo.defaultInfo)
