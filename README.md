@@ -41,6 +41,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 * 在线发布、编辑、删除教学作业，支持文字、图片
 * 添加日程计划
 * 教师在线批改作业
+* 导出成绩数据
 * 在线答疑交流
 * 解散课程班级
 
