@@ -182,6 +182,7 @@ const router = new VueRouter({
 
 router.beforeEach((to,from,next) => {
   if(to.path === '/login') return next()
+  if(to.path === '/forgotpsd') return next()
   // if(to.path === '/home/profilehome') return next()
   const usName = window.sessionStorage.getItem('USERNAME')
   if(!usName) return next('/login')
