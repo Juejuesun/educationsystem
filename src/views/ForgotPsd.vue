@@ -20,7 +20,7 @@
                     <el-form-item label="账号" prop="userId">
                         <el-input v-model="formId.userId" placeholder="请选输入账号"></el-input>
                     </el-form-item>
-                    <el-form-item label="活动区域" prop="regist">
+                    <el-form-item label="角色" prop="regist">
                         <el-select v-model="formId.regist" placeholder="请选择角色">
                             <el-option label="学生" value="1"></el-option>
                             <el-option label="教师" value="2"></el-option>

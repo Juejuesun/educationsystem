@@ -60,7 +60,7 @@
                 <div clss="tbheaderbox">
                     <!-- <el-input v-model.trim="search" size="mini" placeholder="输入关键字搜索"  clearable/> -->
                     <span class="headerbtn" @click="addwork(scope.row)">发布作业</span>
-                    <span class="headerbtn animated fadeIn" style="color: red;" v-show="toShow" @click="delThose">删除选中</span>
+                    <span class="headerbtn animated fadeIn" style="color: red;" v-show="toShow" @click="askDeleteThose">删除选中</span>
                 </div>
             </template>
             <template slot-scope="scope">
@@ -362,6 +362,20 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
+        },
+        askDeleteThose() {
+            this.$confirm('此操作将删除该项作业, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.delThose()  
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });          
+            });
         },
         async delThose() {
             let asc = []
