@@ -123,7 +123,7 @@ export default {
         }
         return (extension || extension2)
       },
-      async uploadFile(params) { 
+      async uploadFile(params) { //xlxs
         const _file = params.file;
         const fileReader = new FileReader();
         fileReader.onload = (ev) => {
