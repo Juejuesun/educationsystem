@@ -12,6 +12,7 @@ import vueEventCalendar from 'vue-event-calendar'
 
 // 导入全局样式
 import './assets/global.css'
+import 'font-awesome/scss/font-awesome.scss'
 
 // Vue.config.productionTip = false
 Vue.config.productionTip = true
