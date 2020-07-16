@@ -17,9 +17,8 @@ import 'font-awesome/scss/font-awesome.scss'
 // Vue.config.productionTip = false
 Vue.config.productionTip = true
 
-// axios.defaults.baseURL = 'http://localhost:81'//测试用
-// axios.defaults.baseURL = 'http://39.97.119.247:81'//测试2
-axios.defaults.baseURL = 'http://47.92.202.164:8443'//正式
+axios.defaults.baseURL = 'http://localhost:81'//测试用
+
 
 Vue.prototype.$http = axios
 
@@ -30,8 +29,8 @@ Vue.use(vueEventCalendar, {
 Vue.use(new VueSocketIo({
   debug: false,
   // debug: true,
-  // connection: SocketIO('http://localhost:8081'),//测试接口
-  connection: SocketIO('http://39.97.119.247:8081'),
+  connection: SocketIO('http://localhost:8081'),//测试接口
+  // connection: SocketIO('http://39.97.119.247:8081'),
   vuex: {
     store,
     mutationPrefix: "SOCKET_",
